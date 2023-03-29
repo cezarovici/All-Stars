@@ -92,7 +92,7 @@ public class Game implements Runnable
      */
     private void InitGame()
     {
-        wnd = new GameWindow("Schelet Proiect PAOO", 1920, 1080);
+        wnd = new GameWindow("Schelet Proiect PAOO", 800, 600);
             /// Este construita fereastra grafica.
         wnd.BuildGameWindow();
             /// Se incarca toate elementele grafice (dale)
@@ -118,7 +118,7 @@ public class Game implements Runnable
         final double timeFrame      = 1000000000 / framesPerSecond; /*!< Durata unui frame in nanosecunde.*/
 
             /// Atat timp timp cat threadul este pornit Update() & Draw()
-        while (runState)
+        while (runState == true)
         {
                 /// Se obtine timpul curent
             curentTime = System.nanoTime();
@@ -142,7 +142,7 @@ public class Game implements Runnable
      */
     public synchronized void StartGame()
     {
-        if(!runState)
+        if(runState == false)
         {
                 /// Se actualizeaza flagul de stare a threadului
             runState = true;
@@ -166,7 +166,7 @@ public class Game implements Runnable
      */
     public synchronized void StopGame()
     {
-        if(runState)
+        if(runState == true)
         {
                 /// Actualizare stare thread
             runState = false;
