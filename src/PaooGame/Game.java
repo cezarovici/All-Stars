@@ -2,7 +2,7 @@ package PaooGame;
 
 import PaooGame.GameWindow.GameWindow;
 import PaooGame.Graphics.Assets;
-import PaooGame.Tiles.Tile;
+import PaooGame.Graphics.Background;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -42,6 +42,7 @@ import java.awt.image.BufferStrategy;
  */
 public class Game implements Runnable
 {
+    private Background background;
     private GameWindow      wnd;        /*!< Fereastra in care se va desena tabla jocului*/
     private boolean         runState;   /*!< Flag ce starea firului de executie.*/
     private Thread          gameThread; /*!< Referinta catre thread-ul de update si draw al ferestrei*/
@@ -61,7 +62,6 @@ public class Game implements Runnable
     private Graphics        g;          /*!< Referinta catre un context grafic.*/
 
 
-    private Tile tile; /*!< variabila membra temporara. Este folosita in aceasta etapa doar pentru a desena ceva pe ecran.*/
 
     /*! \fn public Game(String title, int width, int height)
         \brief Constructor de initializare al clasei Game.
@@ -73,6 +73,13 @@ public class Game implements Runnable
         \param width Latimea ferestrei in pixeli.
         \param height Inaltimea ferestrei in pixeli.
      */
+
+    private enum STATE{
+        MENU,
+        GAME
+    }
+
+    private STATE State = STATE.MENU;
     public Game(String title, int width, int height)
     {
             /// Obiectul GameWindow este creat insa fereastra nu este construita
@@ -92,11 +99,12 @@ public class Game implements Runnable
      */
     private void InitGame()
     {
-        wnd = new GameWindow("Schelet Proiect PAOO", 800, 600);
+        wnd = new GameWindow("Schelet Proiect PAOO", 1920, 1080);
             /// Este construita fereastra grafica.
         wnd.BuildGameWindow();
             /// Se incarca toate elementele grafice (dale)
         Assets.Init();
+        background = Assets.field1;
     }
 
     /*! \fn public void run()
@@ -232,13 +240,14 @@ public class Game implements Runnable
 
             /// operatie de desenare
             // ...............
-            Tile.grassTile.Draw(g, 0 * Tile.TILE_WIDTH, 0);
-            Tile.soilTile.Draw(g, 1 * Tile.TILE_WIDTH, 0);
-            Tile.waterTile.Draw(g, 2 * Tile.TILE_WIDTH, 0);
-            Tile.mountainTile.Draw(g, 3 * Tile.TILE_WIDTH, 0);
-            Tile.treeTile.Draw(g, 4 * Tile.TILE_WIDTH, 0);
+//            Tile.grassTile.Draw(g, 0 * Tile.TILE_WIDTH, 0);
+//            Tile.soilTile.Draw(g, 1 * Tile.TILE_WIDTH, 0);
+//            Tile.waterTile.Draw(g, 2 * Tile.TILE_WIDTH, 0);
+//            Tile.mountainTile.Draw(g, 3 * Tile.TILE_WIDTH, 0);
+//            Tile.treeTile.Draw(g, 4 * Tile.TILE_WIDTH, 0);
 
-            g.drawRect(1 * Tile.TILE_WIDTH, 1 * Tile.TILE_HEIGHT, Tile.TILE_WIDTH, Tile.TILE_HEIGHT);
+            background.Draw(g);
+
 
 
             // end operatie de desenare
