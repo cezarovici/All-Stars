@@ -23,5 +23,4 @@ public class GameObject {
         moveY(y);
         moveX(x);
     }
-
 }

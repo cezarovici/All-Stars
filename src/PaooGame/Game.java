@@ -1,5 +1,6 @@
 package PaooGame;
 
+import PaooGame.GameObjects.Player;
 import PaooGame.GameWindow.GameWindow;
 import PaooGame.Graphics.Assets;
 import PaooGame.Graphics.Background;
@@ -74,12 +75,8 @@ public class Game implements Runnable
         \param height Inaltimea ferestrei in pixeli.
      */
 
-    private enum STATE{
-        MENU,
-        GAME
-    }
+    Player player1,player2;
 
-    private STATE State = STATE.MENU;
     public Game(String title, int width, int height)
     {
             /// Obiectul GameWindow este creat insa fereastra nu este construita
@@ -104,6 +101,7 @@ public class Game implements Runnable
         wnd.BuildGameWindow();
             /// Se incarca toate elementele grafice (dale)
         Assets.Init();
+
         background = Assets.field1;
     }
 

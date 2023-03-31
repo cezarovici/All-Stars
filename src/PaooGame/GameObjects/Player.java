@@ -1,4 +1,5 @@
 package PaooGame.GameObjects;
 
-public class Player {
+public class Player extends GameObject {
+
 }

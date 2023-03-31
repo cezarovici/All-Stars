@@ -13,6 +13,7 @@ public class Assets
     public static BufferedImage playerLeft;
     public static BufferedImage playerRight;
     public static Background field1;
+
     /*! \fn public static void Init()
         \brief Functia initializaza referintele catre elementele grafice utilizate.
 
@@ -22,7 +23,8 @@ public class Assets
     public static void Init()
     {
             /// Se creaza temporar un obiect SpriteSheet initializat prin intermediul clasei ImageLoader
-        SpriteSheet sheet = new SpriteSheet(ImageLoader.LoadImage("/textures/PaooGameSpriteSheet.png"));
+        SpriteSheet players = new SpriteSheet(ImageLoader.LoadImage("/textures/Players.png"));
         field1 = new Background(ImageLoader.LoadImage("/textures/NewYorkKnicksField.jpg"));
+
     }
 }
