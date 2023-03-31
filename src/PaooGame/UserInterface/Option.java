@@ -1,4 +1,4 @@
-package PaooGame;
+package PaooGame.UserInterface;
 
 import java.awt.*;
 
