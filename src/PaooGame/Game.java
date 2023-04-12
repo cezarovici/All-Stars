@@ -4,9 +4,13 @@ import PaooGame.GameObjects.Player;
 import PaooGame.GameWindow.GameWindow;
 import PaooGame.Graphics.Assets;
 import PaooGame.Graphics.Background;
+import PaooGame.UserInterface.Keyboard;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
+
+import static java.awt.event.KeyEvent.VK_X;
 
 /*! \class Game
     \brief Clasa principala a intregului proiect. Implementeaza Game - Loop (Update -> Draw)
@@ -138,6 +142,10 @@ public class Game implements Runnable
                 Draw();
                 oldTime = curentTime;
             }
+
+            if(Keyboard.isKeyPressed(KeyEvent.VK_X)){
+                StopGame();
+            }
         }
 
     }
@@ -149,7 +157,7 @@ public class Game implements Runnable
      */
     public synchronized void StartGame()
     {
-        if(runState == false)
+        if(!runState)
         {
                 /// Se actualizeaza flagul de stare a threadului
             runState = true;
@@ -173,7 +181,7 @@ public class Game implements Runnable
      */
     public synchronized void StopGame()
     {
-        if(runState == true)
+        if(runState)
         {
                 /// Actualizare stare thread
             runState = false;

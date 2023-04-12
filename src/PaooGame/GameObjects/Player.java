@@ -22,6 +22,17 @@ public class Player extends GameObject {
     public void move(int x, int y){
         super.move(x,y);
     }
+
+    public void jump(){
+        int jumpLength = 100;
+        for(int i = 0 ; i < jumpLength ; i++){
+            move(0,-1);
+        }
+
+//        for(int i = 0 ; i < jumpLength ; i++){
+//            move(0,-1);
+//        }
+    }
     @Override
     public void update() {
         int deltaY = 0, deltaX = 0;
@@ -31,7 +42,7 @@ public class Player extends GameObject {
         }
 
         if (Keyboard.isKeyPressed(KeyEvent.VK_W)) {
-            deltaY -= STEP;
+            jump();
         }
 
         if (Keyboard.isKeyPressed(KeyEvent.VK_A)) {
