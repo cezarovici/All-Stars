@@ -103,6 +103,7 @@ public class Game implements Runnable
         Assets.Init();
 
         background = Assets.field1;
+        player1 = Assets.playerLeft;
     }
 
     /*! \fn public void run()
@@ -124,7 +125,7 @@ public class Game implements Runnable
         final double timeFrame      = 1000000000 / framesPerSecond; /*!< Durata unui frame in nanosecunde.*/
 
             /// Atat timp timp cat threadul este pornit Update() & Draw()
-        while (runState == true)
+        while (runState)
         {
                 /// Se obtine timpul curent
             curentTime = System.nanoTime();
@@ -203,7 +204,7 @@ public class Game implements Runnable
      */
     private void Update()
     {
-
+        player1.update();
     }
 
     /*! \fn private void Draw()
@@ -245,6 +246,7 @@ public class Game implements Runnable
 //            Tile.treeTile.Draw(g, 4 * Tile.TILE_WIDTH, 0);
 
             background.Draw(g);
+            player1.Draw(g);
 
 
 
