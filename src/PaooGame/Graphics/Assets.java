@@ -1,5 +1,7 @@
 package PaooGame.Graphics;
 
+import PaooGame.GameObjects.Player;
+
 import java.awt.image.BufferedImage;
 
 /*! \class public class Assets
@@ -10,7 +12,7 @@ import java.awt.image.BufferedImage;
 public class Assets
 {
         /// Referinte catre elementele grafice (dale) utilizate in joc.
-    public static BufferedImage playerLeft;
+    public static Player playerLeft;
     public static BufferedImage playerRight;
     public static Background field1;
 
@@ -24,7 +26,8 @@ public class Assets
     {
             /// Se creaza temporar un obiect SpriteSheet initializat prin intermediul clasei ImageLoader
         SpriteSheet players = new SpriteSheet(ImageLoader.LoadImage("/textures/Players.png"));
-        field1 = new Background(ImageLoader.LoadImage("/textures/NewYorkKnicksField.jpg"));
 
+        field1 = new Background(ImageLoader.LoadImage("/textures/NewYorkKnicksField.jpg"));
+        playerLeft = new Player(players.crop(0,0),0,0);
     }
 }

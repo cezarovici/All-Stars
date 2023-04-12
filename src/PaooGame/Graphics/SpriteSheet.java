@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
  */
 public class SpriteSheet
 {
-    private BufferedImage       spriteSheet;              /*!< Referinta catre obiectul BufferedImage ce contine sprite sheet-ul.*/
+    private final BufferedImage       spriteSheet;              /*!< Referinta catre obiectul BufferedImage ce contine sprite sheet-ul.*/
     private static final int    tileWidth   = 256;   /*!< Latimea unei dale din sprite sheet.*/
     private static final int    tileHeight  = 256;   /*!< Inaltime unei dale din sprite sheet.*/
 
