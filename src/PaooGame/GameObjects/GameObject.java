@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public abstract class GameObject {
-    private final BufferedImage sprite;
+    protected final BufferedImage sprite;
     private int x , y;
 
     protected GameObject(BufferedImage sprite,int x , int y){
@@ -27,6 +27,17 @@ public abstract class GameObject {
     protected void move(int x, int y){
         moveY(y);
         moveX(x);
+    }
+
+    protected int getX(){
+        return x;
+    }
+    protected int getY(){
+        return y;
+    }
+
+    protected void setY(int y){
+        this.y = y;
     }
 
     abstract void update();
