@@ -14,8 +14,8 @@ public class GameWindow
 {
     private JFrame  wndFrame;       /*!< fereastra principala a jocului*/
     private String  wndTitle;       /*!< titlul ferestrei*/
-    private int     wndWidth;       /*!< latimea ferestrei in pixeli*/
-    private int     wndHeight;      /*!< inaltimea ferestrei in pixeli*/
+    private static int     wndWidth;       /*!< latimea ferestrei in pixeli*/
+    private static int     wndHeight;      /*!< inaltimea ferestrei in pixeli*/
 
     private Canvas  canvas;         /*!< "panza/tablou" in care se poate desena*/
 
@@ -100,7 +100,7 @@ public class GameWindow
     /*! \fn public int GetWndWidth()
         \brief Returneaza latimea ferestrei.
      */
-    public int GetWndWidth()
+    static public int GetWndWidth()
     {
         return wndWidth;
     }
@@ -108,7 +108,7 @@ public class GameWindow
     /*! \fn public int GetWndWidth()
         \brief Returneaza inaltimea ferestrei.
      */
-    public int GetWndHeight()
+    static public int GetWndHeight()
     {
         return wndHeight;
     }
