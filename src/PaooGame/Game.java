@@ -117,37 +117,48 @@ public class Game implements Runnable
      */
     public void run()
     {
-            /// Initializeaza obiectul game
+        // Initialize game object
         InitGame();
-        long oldTime = System.nanoTime();   /*!< Retine timpul in nanosecunde aferent frame-ului anterior.*/
-        long curentTime;                    /*!< Retine timpul curent de executie.*/
 
-            /// Apelul functiilor Update() & Draw() trebuie realizat la fiecare 16.7 ms
-            /// sau mai bine spus de 60 ori pe secunda.
+        long oldTime = System.currentTimeMillis();
+        long currentTime;
 
-        final int framesPerSecond   = 60; /*!< Constanta intreaga initializata cu numarul de frame-uri pe secunda.*/
-        final double timeFrame      = 1000000000 / framesPerSecond; /*!< Durata unui frame in nanosecunde.*/
+        final int framesPerSecond = 60;
+        final long timeFrame = 1000 / framesPerSecond;
 
-            /// Atat timp timp cat threadul este pornit Update() & Draw()
+        int frames = 0;
+        long frameStartTime = System.currentTimeMillis();
+
         while (runState)
         {
-                /// Se obtine timpul curent
-            curentTime = System.nanoTime();
-                /// Daca diferenta de timp dintre curentTime si oldTime mai mare decat 16.6 ms
-            if((curentTime - oldTime) > timeFrame)
+            // Get current time
+            currentTime = System.currentTimeMillis();
+
+            // Update game if enough time has passed
+            if (currentTime - oldTime >= timeFrame)
             {
-                /// Actualizeaza pozitiile elementelor
                 Update();
-                /// Deseneaza elementele grafica in fereastra.
                 Draw();
-                oldTime = curentTime;
+                oldTime = currentTime;
+                frames++;
             }
 
-            if(Keyboard.isKeyPressed(KeyEvent.VK_X)){
+            // Print FPS and tick rate every second
+            if (currentTime - frameStartTime >= 1000)
+            {
+                double tickTime = (double)(currentTime - frameStartTime) / frames;
+                double fps = frames / ((double)(currentTime - frameStartTime) / 1000);
+                System.out.printf("Tick: %.2f ms, FPS: %.2f\n", tickTime, fps);
+                frames = 0;
+                frameStartTime = currentTime;
+            }
+
+            // Check for user input to stop game
+            if (Keyboard.isKeyPressed(KeyEvent.VK_X))
+            {
                 StopGame();
             }
         }
-
     }
 
     /*! \fn public synchronized void start()
