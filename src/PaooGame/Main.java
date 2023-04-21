@@ -1,4 +1,4 @@
-package PaooGame;
+    package PaooGame;
 
 import PaooGame.GameWindow.GameWindow;
 
