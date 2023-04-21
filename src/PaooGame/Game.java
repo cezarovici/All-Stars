@@ -1,15 +1,18 @@
 package PaooGame;
 
+import PaooGame.GameObjects.Basket;
 import PaooGame.GameObjects.Player;
 import PaooGame.GameWindow.GameWindow;
 import PaooGame.Graphics.Assets;
 import PaooGame.Graphics.Background;
 import PaooGame.Graphics.Fan;
+import PaooGame.Graphics.RunningAd;
 import PaooGame.UserInterface.Keyboard;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
+import java.util.*;
 
 import static java.awt.event.KeyEvent.VK_X;
 
@@ -48,6 +51,8 @@ import static java.awt.event.KeyEvent.VK_X;
  */
 public class Game implements Runnable
 {
+    private ArrayList<RunningAd> runningAds;
+
     private Background background;
     private GameWindow      wnd;        /*!< Fereastra in care se va desena tabla jocului*/
     private boolean         runState;   /*!< Flag ce starea firului de executie.*/
@@ -82,6 +87,7 @@ public class Game implements Runnable
 
     Player player1,player2;
     Fan[] fans;
+    Basket basketLeft,basketRight;
 
     public Game(String title, int width, int height)
     {
@@ -110,7 +116,15 @@ public class Game implements Runnable
 
         background = Assets.field1;
         player1 = Assets.playerLeft;
+        player2 = Assets.playerRight;
+
+
         fans = Assets.fans;
+
+        runningAds = Assets.runningAds;
+
+        basketLeft = Assets.basketLeft;
+        basketRight = Assets.basketRight;
     }
 
     /*! \fn public void run()
@@ -154,12 +168,6 @@ public class Game implements Runnable
                 System.out.printf("Tick: %.2f ms, FPS: %.2f\n", tickTime, fps);
                 frames = 0;
                 frameStartTime = currentTime;
-            }
-
-            // Check for user input to stop game
-            if (Keyboard.isKeyPressed(KeyEvent.VK_X))
-            {
-                StopGame();
             }
         }
     }
@@ -227,6 +235,11 @@ public class Game implements Runnable
     private void Update()
     {
         player1.update();
+        player2.update();
+
+        for (RunningAd ad : runningAds) {
+            ad.update();
+        }
     }
 
     /*! \fn private void Draw()
@@ -259,13 +272,22 @@ public class Game implements Runnable
             /// Se sterge ce era
         g.clearRect(0, 0, wnd.GetWndWidth(), wnd.GetWndHeight());
 
-        background.Draw(g);
-        player1.Draw(g);
-
+        for (RunningAd ad : runningAds) {
+            ad.draw(g);
+        }
 
         for (Fan fan : fans) {
             fan.Draw(g);
         }
+
+        background.Draw(g);
+
+        player1.Draw(g);
+        player2.Draw(g);
+
+        basketRight.Draw(g);
+        basketLeft.Draw(g);
+
 
         bs.show();
 
