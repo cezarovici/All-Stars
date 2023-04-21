@@ -3,10 +3,7 @@ package PaooGame;
 import PaooGame.GameObjects.Basket;
 import PaooGame.GameObjects.Player;
 import PaooGame.GameWindow.GameWindow;
-import PaooGame.Graphics.Assets;
-import PaooGame.Graphics.Background;
-import PaooGame.Graphics.Fan;
-import PaooGame.Graphics.RunningAd;
+import PaooGame.Graphics.*;
 import PaooGame.UserInterface.Keyboard;
 
 import java.awt.*;
@@ -88,7 +85,7 @@ public class Game implements Runnable
     Player player1,player2;
     Fan[] fans;
     Basket basketLeft,basketRight;
-
+    Clock clock;
     public Game(String title, int width, int height)
     {
             /// Obiectul GameWindow este creat insa fereastra nu este construita
@@ -125,6 +122,8 @@ public class Game implements Runnable
 
         basketLeft = Assets.basketLeft;
         basketRight = Assets.basketRight;
+
+        clock = Assets.clock;
     }
 
     /*! \fn public void run()
@@ -287,7 +286,7 @@ public class Game implements Runnable
 
         basketRight.Draw(g);
         basketLeft.Draw(g);
-
+        clock.draw(g);
 
         bs.show();
 

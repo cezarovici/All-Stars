@@ -1,6 +1,7 @@
 package PaooGame.Graphics;
 
 import PaooGame.GameObjects.Basket;
+import PaooGame.GameObjects.GameObject;
 import PaooGame.GameObjects.Player;
 import PaooGame.GameWindow.GameWindow;
 
@@ -8,6 +9,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
 
 /*! \class public class Assets
     \brief Clasa incarca fiecare element grafic necesar jocului.
@@ -27,6 +29,7 @@ public class Assets
     public static Background field1;
     public static ArrayList<RunningAd> runningAds = new ArrayList<RunningAd>();;
     public static Fan []fans = new Fan[100];
+    public static Clock clock;
     /*! \fn public static void Init()
         \brief Functia initializaza referintele catre elementele grafice utilizate.
 
@@ -56,6 +59,8 @@ public class Assets
 
         runningAds.add(wizardGame2Add);
         runningAds.add(yourAddHere);
+
+        clock = new Clock(GameWindow.GetWndWidth()/2,50,60);
 
         // Set up the game bounds
         int gameWidth = GameWindow.GetWndWidth();
