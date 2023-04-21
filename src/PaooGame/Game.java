@@ -4,6 +4,7 @@ import PaooGame.GameObjects.Player;
 import PaooGame.GameWindow.GameWindow;
 import PaooGame.Graphics.Assets;
 import PaooGame.Graphics.Background;
+import PaooGame.Graphics.Fan;
 import PaooGame.UserInterface.Keyboard;
 
 import java.awt.*;
@@ -80,6 +81,7 @@ public class Game implements Runnable
      */
 
     Player player1,player2;
+    Fan[] fans;
 
     public Game(String title, int width, int height)
     {
@@ -108,6 +110,7 @@ public class Game implements Runnable
 
         background = Assets.field1;
         player1 = Assets.playerLeft;
+        fans = Assets.fans;
     }
 
     /*! \fn public void run()
@@ -256,25 +259,16 @@ public class Game implements Runnable
             /// Se sterge ce era
         g.clearRect(0, 0, wnd.GetWndWidth(), wnd.GetWndHeight());
 
-            /// operatie de desenare
-            // ...............
-//            Tile.grassTile.Draw(g, 0 * Tile.TILE_WIDTH, 0);
-//            Tile.soilTile.Draw(g, 1 * Tile.TILE_WIDTH, 0);
-//            Tile.waterTile.Draw(g, 2 * Tile.TILE_WIDTH, 0);
-//            Tile.mountainTile.Draw(g, 3 * Tile.TILE_WIDTH, 0);
-//            Tile.treeTile.Draw(g, 4 * Tile.TILE_WIDTH, 0);
-
-            background.Draw(g);
-            player1.Draw(g);
+        background.Draw(g);
+        player1.Draw(g);
 
 
+        for (Fan fan : fans) {
+            fan.Draw(g);
+        }
 
-            // end operatie de desenare
-            /// Se afiseaza pe ecran
         bs.show();
 
-            /// Elibereaza resursele de memorie aferente contextului grafic curent (zonele de memorie ocupate de
-            /// elementele grafice ce au fost desenate pe canvas).
         g.dispose();
     }
 }
