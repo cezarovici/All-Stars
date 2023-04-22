@@ -79,7 +79,6 @@ public class Player extends GameObject {
             deltaX -= STEP;
         }
 
-
         if (Keyboard.isKeyPressed(playerControls.getRightKey())) {
             deltaX += STEP;
         }
@@ -96,8 +95,11 @@ public class Player extends GameObject {
         double newY = getY() + avgYVelocity * time;
 
         // Apply air resistance to the jump
-        newYVelocity = Math.max(newYVelocity, -30); // Adjust this value to control air resistance
-        if (newY > GameWindow.GetWndHeight() - sprite.getHeight()) { // Player has landed
+        newYVelocity = Math.max(newYVelocity, -30);
+
+        // Adjust this value to control air resistance
+        if (newY > GameWindow.GetWndHeight() - sprite.getHeight()) {
+            // Player has landed
             isJumping = false;
             newY = GameWindow.GetWndHeight() - sprite.getHeight();
         }

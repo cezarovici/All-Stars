@@ -1,17 +1,14 @@
 package PaooGame;
 
+import PaooGame.GameObjects.Ball;
 import PaooGame.GameObjects.Basket;
 import PaooGame.GameObjects.Player;
 import PaooGame.GameWindow.GameWindow;
 import PaooGame.Graphics.*;
-import PaooGame.UserInterface.Keyboard;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.util.*;
-
-import static java.awt.event.KeyEvent.VK_X;
 
 /*! \class Game
     \brief Clasa principala a intregului proiect. Implementeaza Game - Loop (Update -> Draw)
@@ -86,6 +83,7 @@ public class Game implements Runnable
     Fan[] fans;
     Basket basketLeft,basketRight;
     Clock clock;
+    Ball ball;
     public Game(String title, int width, int height)
     {
             /// Obiectul GameWindow este creat insa fereastra nu este construita
@@ -124,6 +122,8 @@ public class Game implements Runnable
         basketRight = Assets.basketRight;
 
         clock = Assets.clock;
+
+        ball = Assets.ball;
     }
 
     /*! \fn public void run()
@@ -287,6 +287,8 @@ public class Game implements Runnable
         basketRight.Draw(g);
         basketLeft.Draw(g);
         clock.draw(g);
+
+        ball.Draw(g);
 
         bs.show();
 

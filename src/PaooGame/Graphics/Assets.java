@@ -1,5 +1,6 @@
 package PaooGame.Graphics;
 
+import PaooGame.GameObjects.Ball;
 import PaooGame.GameObjects.Basket;
 import PaooGame.GameObjects.GameObject;
 import PaooGame.GameObjects.Player;
@@ -30,6 +31,8 @@ public class Assets
     public static ArrayList<RunningAd> runningAds = new ArrayList<RunningAd>();;
     public static Fan []fans = new Fan[100];
     public static Clock clock;
+    public static Ball ball;
+
     /*! \fn public static void Init()
         \brief Functia initializaza referintele catre elementele grafice utilizate.
 
@@ -44,7 +47,7 @@ public class Assets
 
         field1 = new Background(ImageLoader.LoadImage("/textures/NewYorkKnicksField.jpg"));
 
-
+        ball = new Ball(ImageLoader.LoadImage("/textures/ball.png"),GameWindow.GetWndWidth()/2,GameWindow.GetWndHeight()/2);
 
         playerLeft = new Player(players.crop(0,0),0,1080/2);
         playerLeft.setKeys(PLAYER1_KEYS);
