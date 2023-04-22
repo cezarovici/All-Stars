@@ -55,6 +55,7 @@ public abstract class GameObject {
         return rect1.intersects(rect2);
     }
 
+
     public ArrayList<GameObject> getGameObjects(){
         return gameObjects;
     }

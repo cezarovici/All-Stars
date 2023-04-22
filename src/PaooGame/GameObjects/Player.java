@@ -23,14 +23,6 @@ public class Player extends GameObject {
         playerControls = new PlayerControlTemplate(keys);
     }
 
-    private void checkCollisions(){
-        for(GameObject obj: getGameObjects()){
-            if (this != obj && this.collides(obj)){
-                STEP = -6;
-                System.out.println("COLLIDEEESS !!!!");
-            }
-        }
-    }
 
     @Override
     public void Draw(Graphics graphics) {
@@ -61,7 +53,6 @@ public class Player extends GameObject {
             newY = GameWindow.GetWndHeight() - sprite.getHeight();
         }
 
-        checkCollisions();
         // Set the new position of the player
         setX(newX);
         setY(newY);
@@ -108,5 +99,11 @@ public class Player extends GameObject {
         yVelocity = newYVelocity;
 
         move(deltaX, deltaY);
+
+        for(GameObject obj: getGameObjects()){
+            if (this != obj && this.collides(obj)){
+                move(-deltaX,deltaY);
+            }
+        }
     }
 }
