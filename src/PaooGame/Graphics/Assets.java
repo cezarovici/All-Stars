@@ -39,6 +39,17 @@ public class Assets
         Aceasta functie poate fi rescrisa astfel incat elementele grafice incarcate/utilizate
         sa fie parametrizate. Din acest motiv referintele nu sunt finale.
      */
+
+
+    public static final int hitBoxXBall = 170;
+    public static  final int hitBoxYBall = 170;
+
+    public static final int hitBoxXPlayer = 240;
+    public static final int hitBoxYPlayer = 240;
+
+    public static final int hitBoxXBasket = 20;
+    public static final int hitBoxYBasket = 20;
+
     public static void Init()
     {
         /// Se creazcca temporar un obiect SpriteSheet initializat prin intermediul clasei ImageLoader
@@ -47,18 +58,18 @@ public class Assets
 
         field1 = new Background(ImageLoader.LoadImage("/textures/NewYorkKnicksField.jpg"));
 
-        ball = new Ball(ImageLoader.LoadImage("/textures/ball.png"),GameWindow.GetWndWidth()/2,GameWindow.GetWndHeight()/2);
+        ball = new Ball(ImageLoader.LoadImage("/textures/ball.png"),GameWindow.GetWndWidth()/2,GameWindow.GetWndHeight()/2,hitBoxXBall,hitBoxYBall);
 
-        playerLeft = new Player(players.crop(0,0),0,1080/2);
+        playerLeft = new Player(players.crop(0,0),0,1080/2,hitBoxXPlayer,hitBoxYPlayer);
         playerLeft.setKeys(PLAYER1_KEYS);
-        playerRight = new Player(players.crop(1,0),1920,1080/2);
+        playerRight = new Player(players.crop(1,0),1920,1080/2,hitBoxXPlayer,hitBoxYPlayer);
         playerRight.setKeys(PLAYER2_KEYS);
 
         RunningAd wizardGame2Add = new RunningAd("Play WizardGame2 FREE", GameWindow.GetWndWidth() / 8, 500, 5);
-        RunningAd yourAddHere = new RunningAd("Your add here", GameWindow.GetWndWidth() / 2, 500, 5);
+        RunningAd yourAddHere = new RunningAd("Casa lui Nea Cimpoi FREE", GameWindow.GetWndWidth() / 2, 500, 5);
 
-        basketLeft = new Basket(ImageLoader.LoadImage("/textures/basketSpriteLeft.png"),0,1080-450-234);            // todo make this constants
-        basketRight = new Basket(ImageLoader.LoadImage("/textures/basketSpriteRight.png"),1920-163,1080-450-234);   // todo make this constants
+        basketLeft = new Basket(ImageLoader.LoadImage("/textures/basketSpriteLeft.png"),0,1080-450-234,hitBoxXBasket,hitBoxYBasket);            // todo make this constants
+        basketRight = new Basket(ImageLoader.LoadImage("/textures/basketSpriteRight.png"),1920-163,1080-450-234,hitBoxXBasket,hitBoxYBasket);   // todo make this constants
 
         runningAds.add(wizardGame2Add);
         runningAds.add(yourAddHere);

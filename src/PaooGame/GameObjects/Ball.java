@@ -6,11 +6,13 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Ball extends GameObject{
+    double vx = 0; // horizontal velocity of the ball
+    final double MAX_VX = 5; // maximum horizontal velocity of the ball
     private double vy; // vertical velocity
     private boolean isBouncing; // flag to track if the ball is currently bouncing
 
-    public Ball(BufferedImage sprite, int x, int y) {
-        super(sprite, x, y);
+    public Ball(BufferedImage sprite, int x, int y,int hitBoxX,int hitBoxY) {
+        super(sprite, x, y,hitBoxX,hitBoxY);
         this.vy = 0; // initialize velocity to 0
         this.isBouncing = false; // initialize bouncing flag to false
     }
@@ -19,6 +21,7 @@ public class Ball extends GameObject{
         if (isBouncing) {
             // apply gravity to vertical velocity
             vy += 0.1; // adjust gravity strength as needed
+
 
             // update ball's position based on velocity
             setY((int)(getY() + vy));
@@ -39,7 +42,15 @@ public class Ball extends GameObject{
 
                     // adjust the ball's velocity based on the collision
                     vy = -vy * 0.8 + dy / dist * 2;
+                    vx = dx / dist * 5; // adjust horizontal velocity based on direction of collision
                     obj.move((int) (dx / dist * 10), (int) (dy / dist * 10));
+
+                    // update ball position
+                    setX(getX() + (int) vx);
+                    setY(getY() + (int) vy);
+
+                    // cap horizontal velocity at maximum value
+                    vx = Math.min(Math.max(vx, -MAX_VX), MAX_VX);
                 }
             }
         }

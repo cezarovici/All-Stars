@@ -9,14 +9,14 @@ import java.awt.image.BufferedImage;
 
 public class Player extends GameObject {
     public static int STEP = 6;
-    public static final double JUMP_VELOCITY = -20;
+    public static final double JUMP_VELOCITY = -30;
     public static final double GRAVITY = 1;
     private double yVelocity = 0;
     private boolean isJumping = false;
 
     private PlayerControlTemplate playerControls;
-    public Player(BufferedImage sprite, int x, int y) {
-        super(sprite, x, y);
+    public Player(BufferedImage sprite, int x, int y,int hitBoxX,int hitBoxY) {
+        super(sprite, x, y,hitBoxX,hitBoxY);
     }
 
     public void setKeys(int []keys){
@@ -101,7 +101,7 @@ public class Player extends GameObject {
         move(deltaX, deltaY);
 
         for(GameObject obj: getGameObjects()){
-            if (this != obj && this.collides(obj)){
+            if (this != obj && !(obj instanceof Ball) && this.collides(obj)){
                 move(-deltaX,deltaY);
             }
         }

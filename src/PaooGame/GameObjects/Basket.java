@@ -7,8 +7,8 @@ import java.awt.image.BufferedImage;
 
 public class Basket extends GameObject {
 
-    public Basket(BufferedImage sprite, int x, int y) {
-        super(sprite, x, y);
+    public Basket(BufferedImage sprite, int x, int y,int hitBoxX,int hitBoxY) {
+        super(sprite, x, y,hitBoxX,hitBoxY);
     }
 
     public void Draw(Graphics g){

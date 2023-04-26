@@ -1,6 +1,4 @@
-    package PaooGame;
-
-import PaooGame.GameWindow.GameWindow;
+package PaooGame;
 
 public class Main
 {
