@@ -12,7 +12,7 @@ public class Ball extends GameObject{
     final double MAX_VX = 5; // maximum horizontal velocity of the ball
     private double vy; // vertical velocity
     private boolean isBouncing; // flag to track if the ball is currently bouncing
-    private final Ellipse2D.Double circleHitBox;
+    private Ellipse2D circleHitBox;
     private static Ball instance = null;
 
 
@@ -20,7 +20,6 @@ public class Ball extends GameObject{
         super(sprite, x, y,hitBoxX,hitBoxY);
         this.vy = 0; // initialize velocity to 0
         this.isBouncing = false; // initialize bouncing flag to false
-        circleHitBox = new Ellipse2D.Double(x,y,hitBoxX,hitBoxY);
     }
 
 
@@ -71,17 +70,19 @@ public class Ball extends GameObject{
         }
     }
 
-
     public void Draw(Graphics g) {
         super.Draw(g);
     }
 
-    @Override
-    public boolean collides(GameObject obj){
-        Ellipse2D ballHitBox = circleHitBox;
-
-        return ballHitBox.intersects(obj.hitBox);
-        }
+  //  @Override
+//    public boolean collides(GameObject obj){
+//        Ellipse2D ballHitBox = hitBox;
+//
+//
+//
+//
+//        return false;
+//    }
 
     public void startBounce() {
         if (!isBouncing) {
