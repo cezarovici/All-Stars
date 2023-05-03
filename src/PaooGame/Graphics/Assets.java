@@ -41,14 +41,14 @@ public class Assets
      */
 
 
-    public static final int hitBoxXBall = 170;
-    public static  final int hitBoxYBall = 170;
+    public static final int hitBoxXBall = 150;
+    public static  final int hitBoxYBall = 150;
 
-    public static final int hitBoxXPlayer = 240;
-    public static final int hitBoxYPlayer = 240;
+    public static final int hitBoxXPlayer = 170;
+    public static final int hitBoxYPlayer = 200;
 
-    public static final int hitBoxXBasket = 20;
-    public static final int hitBoxYBasket = 20;
+    public static final int hitBoxXBasket = 150;
+    public static final int hitBoxYBasket = 30;
 
     public static void Init()
     {
@@ -58,7 +58,7 @@ public class Assets
 
         field1 = new Background(ImageLoader.LoadImage("/textures/NewYorkKnicksField.jpg"));
 
-        ball = new Ball(ImageLoader.LoadImage("/textures/ball.png"),GameWindow.GetWndWidth()/2,GameWindow.GetWndHeight()/2,hitBoxXBall,hitBoxYBall);
+        ball = Ball.getInstance(ImageLoader.LoadImage("/textures/ball.png"),GameWindow.GetWndWidth()/2,GameWindow.GetWndHeight()/2,hitBoxXBall,hitBoxYBall);
 
         playerLeft = new Player(players.crop(0,0),0,1080/2,hitBoxXPlayer,hitBoxYPlayer);
         playerLeft.setKeys(PLAYER1_KEYS);

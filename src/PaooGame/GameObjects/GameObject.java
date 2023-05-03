@@ -24,7 +24,10 @@ public abstract class GameObject {
     protected void Draw(Graphics graphics){
         graphics.setColor(Color.blue);
 
-        graphics.drawRect(hitBox.x, hitBox.y, hitBox.width, hitBox.height);
+        int tempX = x + sprite.getWidth() / 2 -  hitBox.width / 2;
+        int tempY  = y + sprite.getHeight() /2 - hitBox.height/ 2;
+
+        graphics.drawRect(tempX, tempY, hitBox.width, hitBox.height);
         graphics.drawImage(sprite,x,y,null);
     }
 
@@ -69,5 +72,7 @@ public abstract class GameObject {
     public ArrayList<GameObject> getGameObjects(){
         return gameObjects;
     }
-     protected void update(){}
+     protected void update(){
+
+     }
 }

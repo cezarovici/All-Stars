@@ -4,7 +4,6 @@ import PaooGame.GameWindow.GameWindow;
 import PaooGame.UserInterface.Keyboard;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 public class Player extends GameObject {
@@ -23,7 +22,6 @@ public class Player extends GameObject {
         playerControls = new PlayerControlTemplate(keys);
     }
 
-
     @Override
     public void Draw(Graphics graphics) {
         super.Draw(graphics);
@@ -31,7 +29,6 @@ public class Player extends GameObject {
 
     @Override
     public void move(int x, int y) {
-        STEP = 6;
         // Get the current position of the player
         int currentX = getX();
         int currentY = getY();
@@ -56,10 +53,19 @@ public class Player extends GameObject {
         // Set the new position of the player
         setX(newX);
         setY(newY);
-    }
 
+        for(GameObject obj: getGameObjects()){
+            if (this != obj && !(obj instanceof Ball) && this.collides(obj)){
+                setX(currentX);
+                setY(currentY);
+
+                System.out.println("Collides from update");
+            }
+        }
+    }
     @Override
     public void update() {
+        super.update();
         int deltaY = 0, deltaX = 0;
 
         if (Keyboard.isKeyPressed(playerControls.getDownKey())) {
@@ -74,6 +80,7 @@ public class Player extends GameObject {
             deltaX += STEP;
         }
 
+        boolean collidingWithPlayer = false;
         if (Keyboard.isKeyPressed(playerControls.getUpKey()) && !isJumping) {
             yVelocity = JUMP_VELOCITY;
             isJumping = true;
@@ -88,8 +95,20 @@ public class Player extends GameObject {
         // Apply air resistance to the jump
         newYVelocity = Math.max(newYVelocity, -30);
 
-        // Adjust this value to control air resistance
-        if (newY > GameWindow.GetWndHeight() - sprite.getHeight()) {
+        // Check if the player is colliding with another player
+        for (GameObject obj : getGameObjects()) {
+            if (obj instanceof Player && obj != this && this.collides(obj)) {
+                collidingWithPlayer = true;
+                break;
+            }
+        }
+
+        // Adjust player's position and velocity based on collisions
+        if (collidingWithPlayer) {
+            // Cancel the jump
+            newYVelocity = 0;
+            isJumping = false;
+        } else if (newY > GameWindow.GetWndHeight() - sprite.getHeight()) {
             // Player has landed
             isJumping = false;
             newY = GameWindow.GetWndHeight() - sprite.getHeight();
@@ -99,11 +118,5 @@ public class Player extends GameObject {
         yVelocity = newYVelocity;
 
         move(deltaX, deltaY);
-
-        for(GameObject obj: getGameObjects()){
-            if (this != obj && !(obj instanceof Ball) && this.collides(obj)){
-                move(-deltaX,deltaY);
-            }
-        }
     }
 }

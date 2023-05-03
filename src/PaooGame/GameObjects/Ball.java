@@ -3,6 +3,8 @@ package PaooGame.GameObjects;
 import PaooGame.GameWindow.GameWindow;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class Ball extends GameObject{
@@ -10,23 +12,36 @@ public class Ball extends GameObject{
     final double MAX_VX = 5; // maximum horizontal velocity of the ball
     private double vy; // vertical velocity
     private boolean isBouncing; // flag to track if the ball is currently bouncing
+    private final Ellipse2D.Double circleHitBox;
+    private static Ball instance = null;
+
 
     public Ball(BufferedImage sprite, int x, int y,int hitBoxX,int hitBoxY) {
         super(sprite, x, y,hitBoxX,hitBoxY);
         this.vy = 0; // initialize velocity to 0
         this.isBouncing = false; // initialize bouncing flag to false
+        circleHitBox = new Ellipse2D.Double(x,y,hitBoxX,hitBoxY);
     }
 
+
+    public static Ball getInstance(BufferedImage sprite, int x, int y, int hitBoxX, int hitBoxY) {
+        if (instance == null) {
+            instance = new Ball(sprite, x, y, hitBoxX, hitBoxY);
+        }
+        return instance;
+    }
+
+
     public void update() {
+        super.update();
+
         if (isBouncing) {
             // apply gravity to vertical velocity
             vy += 0.1; // adjust gravity strength as needed
 
-
             // update ball's position based on velocity
             setY((int)(getY() + vy));
 
-            // check for collision with the floor
             if (getY() + sprite.getHeight() > GameWindow.GetWndHeight()) {
                 setY(GameWindow.GetWndHeight() - sprite.getHeight()); // reset y-coordinate to the floor
                 vy = -vy * 0.8; // invert velocity and reduce it to simulate bouncing
@@ -56,9 +71,17 @@ public class Ball extends GameObject{
         }
     }
 
+
     public void Draw(Graphics g) {
         super.Draw(g);
     }
+
+    @Override
+    public boolean collides(GameObject obj){
+        Ellipse2D ballHitBox = circleHitBox;
+
+        return ballHitBox.intersects(obj.hitBox);
+        }
 
     public void startBounce() {
         if (!isBouncing) {
