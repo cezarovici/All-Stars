@@ -4,7 +4,6 @@ import PaooGame.GameWindow.GameWindow;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class Ball extends GameObject{
@@ -12,31 +11,31 @@ public class Ball extends GameObject{
     final double MAX_VX = 5; // maximum horizontal velocity of the ball
     private double vy; // vertical velocity
     private boolean isBouncing; // flag to track if the ball is currently bouncing
-    private Ellipse2D circleHitBox;
+    private final double radius;
     private static Ball instance = null;
 
 
-    public Ball(BufferedImage sprite, int x, int y,int hitBoxX,int hitBoxY) {
-        super(sprite, x, y,hitBoxX,hitBoxY);
+    public Ball(BufferedImage sprite, int x, int y,double radius) {
+        super(sprite,x,y);
+        this.radius = radius;
+
         this.vy = 0; // initialize velocity to 0
         this.isBouncing = false; // initialize bouncing flag to false
     }
 
 
-    public static Ball getInstance(BufferedImage sprite, int x, int y, int hitBoxX, int hitBoxY) {
+    public static Ball getInstance(BufferedImage sprite, int x, int y, double radius) {
         if (instance == null) {
-            instance = new Ball(sprite, x, y, hitBoxX, hitBoxY);
+            instance = new Ball(sprite, x, y,radius);
         }
+
         return instance;
     }
 
-
     public void update() {
-        super.update();
-
-        if (isBouncing) {
+        if (isBouncing()) {
             // apply gravity to vertical velocity
-            vy += 0.1; // adjust gravity strength as needed
+            vy += 0.05; // adjust gravity strength as needed
 
             // update ball's position based on velocity
             setY((int)(getY() + vy));
@@ -68,24 +67,37 @@ public class Ball extends GameObject{
                 }
             }
         }
+        else{
+            this.startBounce();
+        }
     }
 
     public void Draw(Graphics g) {
         super.Draw(g);
+        // Draw the hitbox
+        int tempX = (int) (x + sprite.getWidth() / 2 - radius / 2);
+        int tempY  = (int) (y + sprite.getHeight() /2 - radius / 2);
+
+        g.setColor(Color.BLUE);
+        g.drawOval(tempX, tempY, (int) (radius*2), (int) (radius*2));
     }
 
-  //  @Override
-//    public boolean collides(GameObject obj){
-//        Ellipse2D ballHitBox = hitBox;
-//
-//
-//
-//
-//        return false;
-//    }
+    protected boolean collides(GameObject object) {
+        // Calculate the distance between the center of the ball and the player's hitbox
+        if  (!(object instanceof Player player)) {
+            return false;
+        }
+
+        double dx = getX() - player.hitBox.x;
+        double dy = getY() - player.hitBox.y;
+        double distance = Math.sqrt(dx * dx + dy * dy);
+
+        // Check if the distance is less than the sum of the ball's radius and half of the player's width/height
+        return distance < radius + (Math.max(player.hitBox.width, player.hitBox.height) / 2.0);
+    }
 
     public void startBounce() {
-        if (!isBouncing) {
+        if (!isBouncing()){
             isBouncing = true;
             vy = -5; // set initial upward velocity for bouncing
         }

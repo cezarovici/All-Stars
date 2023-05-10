@@ -12,10 +12,12 @@ public class Player extends GameObject {
     public static final double GRAVITY = 1;
     private double yVelocity = 0;
     private boolean isJumping = false;
+    public Rectangle hitBox;
 
     private PlayerControlTemplate playerControls;
     public Player(BufferedImage sprite, int x, int y,int hitBoxX,int hitBoxY) {
-        super(sprite, x, y,hitBoxX,hitBoxY);
+        super(sprite, x, y);
+        hitBox = new Rectangle(x,y,hitBoxX,hitBoxY);
     }
 
     public void setKeys(int []keys){
@@ -25,6 +27,12 @@ public class Player extends GameObject {
     @Override
     public void Draw(Graphics graphics) {
         super.Draw(graphics);
+        graphics.setColor(Color.blue);
+
+        int tempX = x + sprite.getWidth() / 2 -  hitBox.width / 2;
+        int tempY  = y + sprite.getHeight() /2 - hitBox.height/ 2;
+
+        graphics.drawRect(tempX, tempY, hitBox.width, hitBox.height);
     }
 
     @Override
@@ -32,6 +40,9 @@ public class Player extends GameObject {
         // Get the current position of the player
         int currentX = getX();
         int currentY = getY();
+
+        hitBox.y = this.y;
+        hitBox.x = this.x;
 
         // Calculate the new position of the player
         int newX = currentX + x;
@@ -58,14 +69,24 @@ public class Player extends GameObject {
             if (this != obj && !(obj instanceof Ball) && this.collides(obj)){
                 setX(currentX);
                 setY(currentY);
-
-                System.out.println("Collides from update");
             }
         }
     }
     @Override
+    public void setX(int x){
+        super.setX(x);
+        hitBox.x = x;
+    }
+
+
+    @Override
+    public void setY(int y){
+        super.setY(y);
+        hitBox.y = y;
+    }
+    @Override
     public void update() {
-        super.update();
+
         int deltaY = 0, deltaX = 0;
 
         if (Keyboard.isKeyPressed(playerControls.getDownKey())) {
@@ -97,7 +118,7 @@ public class Player extends GameObject {
 
         // Check if the player is colliding with another player
         for (GameObject obj : getGameObjects()) {
-            if (obj instanceof Player && obj != this && this.collides(obj)) {
+            if (obj != this && this.collides(obj)) {
                 collidingWithPlayer = true;
                 break;
             }
@@ -118,5 +139,17 @@ public class Player extends GameObject {
         yVelocity = newYVelocity;
 
         move(deltaX, deltaY);
+    }
+    @Override
+    protected boolean collides(GameObject other) {
+        if (other instanceof Player){
+            Rectangle rect1 = this.hitBox;
+            Rectangle rect2 = ((Player) other).hitBox;
+
+            System.out.println(rect1.intersects(rect2));
+            return rect1.intersects(rect2);
+        }
+
+        return false;
     }
 }

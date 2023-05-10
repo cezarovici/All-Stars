@@ -2,11 +2,9 @@ package PaooGame.Graphics;
 
 import PaooGame.GameObjects.Ball;
 import PaooGame.GameObjects.Basket;
-import PaooGame.GameObjects.GameObject;
 import PaooGame.GameObjects.Player;
 import PaooGame.GameWindow.GameWindow;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -28,7 +26,7 @@ public class Assets
     public static Basket basketLeft;
     public static Basket basketRight;
     public static Background field1;
-    public static ArrayList<RunningAd> runningAds = new ArrayList<RunningAd>();;
+    public static ArrayList<RunningAd> runningAds = new ArrayList<>();;
     public static Fan []fans = new Fan[100];
     public static Clock clock;
     public static Ball ball;
@@ -41,8 +39,7 @@ public class Assets
      */
 
 
-    public static final int hitBoxXBall = 150;
-    public static  final int hitBoxYBall = 150;
+    public static  final int hitBoxBall = 75;
 
     public static final int hitBoxXPlayer = 170;
     public static final int hitBoxYPlayer = 200;
@@ -58,7 +55,7 @@ public class Assets
 
         field1 = new Background(ImageLoader.LoadImage("/textures/NewYorkKnicksField.jpg"));
 
-        ball = Ball.getInstance(ImageLoader.LoadImage("/textures/ball.png"),GameWindow.GetWndWidth()/2,GameWindow.GetWndHeight()/2,hitBoxXBall,hitBoxYBall);
+        ball = Ball.getInstance(ImageLoader.LoadImage("/textures/ball.png"),GameWindow.GetWndWidth()/2,GameWindow.GetWndHeight()/2,hitBoxBall);
 
         playerLeft = new Player(players.crop(0,0),0,1080/2,hitBoxXPlayer,hitBoxYPlayer);
         playerLeft.setKeys(PLAYER1_KEYS);

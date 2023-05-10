@@ -236,7 +236,6 @@ public class Game implements Runnable
         player1.update();
         player2.update();
         ball.update();
-        ball.startBounce();
 
         for (RunningAd ad : runningAds) {
             ad.update();
