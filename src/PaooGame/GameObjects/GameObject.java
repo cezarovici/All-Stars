@@ -16,7 +16,6 @@ public abstract class GameObject {
         this.x = x;
         this.y = y;
 
-
         gameObjects.add(this); // save any instance of an object
     }
     protected void Draw(Graphics graphics){

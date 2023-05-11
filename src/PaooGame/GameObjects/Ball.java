@@ -4,10 +4,13 @@ import PaooGame.GameWindow.GameWindow;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 public class Ball extends GameObject{
-    double vx = 0; // horizontal velocity of the ball
+
+    private double vx = 0; // horizontal velocity of the ball
     final double MAX_VX = 5; // maximum horizontal velocity of the ball
     private double vy; // vertical velocity
     private boolean isBouncing; // flag to track if the ball is currently bouncing
@@ -48,22 +51,32 @@ public class Ball extends GameObject{
             // check for collision with players
             for (GameObject obj : getGameObjects()) {
                 if (obj instanceof Player && this.collides(obj)) {
-                    // calculate the direction and magnitude of the collision
-                    double dx = getX() + sprite.getWidth() / 2 - (obj.getX() + obj.sprite.getWidth() / 2);
-                    double dy = getY() + sprite.getHeight() / 2 - (obj.getY() + obj.sprite.getHeight() / 2);
-                    double dist = Math.sqrt(dx * dx + dy * dy);
+                    Helpers.Bounds playerBounds = new Helpers.Bounds(((Player) obj).bounds); /* player's bounding box coordinates */;
+                    Helpers.Vector2 ballStart = new Helpers.Vector2(x, y);  // Current position of the ball
+                    Helpers.Vector2 ballEnd = ((Player) obj).getCenterOfPlayer();  // Desired position of the ball after the hit
+                    float ballRadius = (float) radius; /* radius of the ball */;
 
-                    // adjust the ball's velocity based on the collision
-                    vy = -vy * 0.8 + dy / dist * 2;
-                    vx = dx / dist * 5; // adjust horizontal velocity based on direction of collision
-                    obj.move((int) (dx / dist * 10), (int) (dy / dist * 10));
+                   Helpers.Intersection intersection = Helpers.Intersection.handleIntersection(playerBounds,ballStart,ballEnd,ballRadius);
+                   if (intersection !=null) {
+                       setX((int) intersection.cx);
+                       setY((int)intersection.cy);
 
-                    // update ball position
-                    setX(getX() + (int) vx);
-                    setY(getY() + (int) vy);
+                       // Get the surface normal from the intersection
+                       float normalX = intersection.nx;
+                       float normalY = intersection.ny;
 
-                    // cap horizontal velocity at maximum value
-                    vx = Math.min(Math.max(vx, -MAX_VX), MAX_VX);
+                       Helpers.Vector2 velocity = new Helpers.Vector2(ballEnd.x - ballStart.x, ballEnd.y - ballStart.y);
+
+                       // Adjust velocity magnitude or any other modifications as needed
+                       // ...
+
+                       // Update ball's new position and velocity
+                       x += velocity.x;
+                       y += velocity.y;
+                       vx = velocity.x;
+                       vy = velocity.y;
+                   }
+
                 }
             }
         }
@@ -79,7 +92,7 @@ public class Ball extends GameObject{
         int tempY  = (int) (y + sprite.getHeight() /2 - radius / 2);
 
         g.setColor(Color.BLUE);
-        g.drawOval(tempX, tempY, (int) (radius*2), (int) (radius*2));
+       // g.drawOval(tempX, tempY, (int) (radius*2), (int) (radius*2));
     }
 
     protected boolean collides(GameObject object) {
@@ -106,4 +119,8 @@ public class Ball extends GameObject{
     public boolean isBouncing() {
         return isBouncing;
     }
+
+
+
+
 }

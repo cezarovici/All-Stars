@@ -14,10 +14,12 @@ public class Player extends GameObject {
     private boolean isJumping = false;
     public Rectangle hitBox;
 
+    public Helpers.Bounds bounds;
     private PlayerControlTemplate playerControls;
     public Player(BufferedImage sprite, int x, int y,int hitBoxX,int hitBoxY) {
         super(sprite, x, y);
         hitBox = new Rectangle(x,y,hitBoxX,hitBoxY);
+        bounds = new Helpers.Bounds(x,y,x+hitBoxX,y+hitBoxY);
     }
 
     public void setKeys(int []keys){
@@ -76,13 +78,19 @@ public class Player extends GameObject {
     public void setX(int x){
         super.setX(x);
         hitBox.x = x;
+        bounds.updateX(x,hitBox.x);
     }
 
+
+    public Helpers.Vector2 getCenterOfPlayer(){
+        return new Helpers.Vector2(hitBox.x+hitBox.width/2,hitBox.y+hitBox.height/2);
+    }
 
     @Override
     public void setY(int y){
         super.setY(y);
         hitBox.y = y;
+        bounds.updateY(y, hitBox.y);
     }
     @Override
     public void update() {
@@ -152,4 +160,5 @@ public class Player extends GameObject {
 
         return false;
     }
+
 }
