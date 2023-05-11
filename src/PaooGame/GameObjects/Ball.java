@@ -16,6 +16,7 @@ public class Ball extends GameObject{
     private boolean isBouncing; // flag to track if the ball is currently bouncing
     private final double radius;
     private static Ball instance = null;
+    private final Ellipse2D.Double hitboxCircle;
 
 
     public Ball(BufferedImage sprite, int x, int y,double radius) {
@@ -24,6 +25,7 @@ public class Ball extends GameObject{
 
         this.vy = 0; // initialize velocity to 0
         this.isBouncing = false; // initialize bouncing flag to false
+        hitboxCircle = new Ellipse2D.Double(x,y,radius*2,radius*2);
     }
 
 
@@ -36,6 +38,8 @@ public class Ball extends GameObject{
     }
 
     public void update() {
+        hitboxCircle.setFrame(getX(),getY(),radius*2,radius*2);
+
         if (isBouncing()) {
             // apply gravity to vertical velocity
             vy += 0.05; // adjust gravity strength as needed
@@ -51,34 +55,26 @@ public class Ball extends GameObject{
             // check for collision with players
             for (GameObject obj : getGameObjects()) {
                 if (obj instanceof Player && this.collides(obj)) {
-                    Helpers.Bounds playerBounds = new Helpers.Bounds(((Player) obj).bounds); /* player's bounding box coordinates */;
-                    Helpers.Vector2 ballStart = new Helpers.Vector2(x, y);  // Current position of the ball
-                    Helpers.Vector2 ballEnd = ((Player) obj).getCenterOfPlayer();  // Desired position of the ball after the hit
-                    float ballRadius = (float) radius; /* radius of the ball */;
+                    // calculate the direction and magnitude of the collision
+                    double dx = getX() + sprite.getWidth() / 2 - (obj.getX() + obj.sprite.getWidth() / 2);
+                    double dy = getY() + sprite.getHeight() / 2 - (obj.getY() + obj.sprite.getHeight() / 2);
+                    double dist = Math.sqrt(dx * dx + dy * dy);
 
-                   Helpers.Intersection intersection = Helpers.Intersection.handleIntersection(playerBounds,ballStart,ballEnd,ballRadius);
-                   if (intersection !=null) {
-                       setX((int) intersection.cx);
-                       setY((int)intersection.cy);
+                    // adjust the ball's velocity based on the collision
+                    vy = -vy * 0.8 + dy / dist * 2;
+                    vx = dx / dist * 5; // adjust horizontal velocity based on direction of collision
+                    obj.move((int) (dx / dist * 10), (int) (dy / dist * 10));
 
-                       // Get the surface normal from the intersection
-                       float normalX = intersection.nx;
-                       float normalY = intersection.ny;
+                    // update ball position
+                    setX(getX() + (int) vx);
+                    setY(getY() + (int) vy);
 
-                       Helpers.Vector2 velocity = new Helpers.Vector2(ballEnd.x - ballStart.x, ballEnd.y - ballStart.y);
-
-                       // Adjust velocity magnitude or any other modifications as needed
-                       // ...
-
-                       // Update ball's new position and velocity
-                       x += velocity.x;
-                       y += velocity.y;
-                       vx = velocity.x;
-                       vy = velocity.y;
-                   }
-
+                    // cap horizontal velocity at maximum value
+                    vx = Math.min(Math.max(vx, -MAX_VX), MAX_VX);
                 }
             }
+
+
         }
         else{
             this.startBounce();
@@ -88,11 +84,64 @@ public class Ball extends GameObject{
     public void Draw(Graphics g) {
         super.Draw(g);
         // Draw the hitbox
-        int tempX = (int) (x + sprite.getWidth() / 2 - radius / 2);
-        int tempY  = (int) (y + sprite.getHeight() /2 - radius / 2);
-
+        Helpers.Vector2 ballStart = getCenter();  // Current position of the ball
+        Graphics2D g2d = (Graphics2D)g;
         g.setColor(Color.BLUE);
-       // g.drawOval(tempX, tempY, (int) (radius*2), (int) (radius*2));
+        //g2d.draw(new Ellipse2D.Float((float) (ballStart.x - radius), (float) (ballStart.y - radius), (float) (radius * 2), (float) (radius * 2)));
+        g2d.draw(hitboxCircle);
+
+        for (GameObject obj : getGameObjects()) {
+            if (obj instanceof Player) {
+                Helpers.Bounds playerBounds = new Helpers.Bounds(((Player) obj).bounds); /* player's bounding box coordinates */
+                ;
+                Helpers.Vector2 ballEnd = obj.getCenter();  // Desired position of the ball after the hit
+                float ballRadius = (float) radius; /* radius of the ball */
+
+                g2d.setColor(Color.BLUE);
+                g2d.draw(((Player) obj).getHitBox());
+
+                g2d.setColor(Color.BLACK);
+                g2d.draw(new Line2D.Float(ballStart.x, ballStart.y, ballEnd.x, ballEnd.y));
+
+                g2d.setColor(Color.YELLOW);
+                Helpers.Vector2 radiusPoint = new Helpers.Vector2(ballStart.x, (float) (ballStart.y - radius));
+                float pointRadius = 8.0f;
+                g2d.setColor(Color.YELLOW);
+                g2d.draw(new Ellipse2D.Float(radiusPoint.x - pointRadius, radiusPoint.y - pointRadius, pointRadius * 2, pointRadius * 2));
+                g2d.draw(new Ellipse2D.Float((float) (ballStart.x - radius), (float) (ballStart.y - radius), (float) (radius * 2), (float) (radius * 2)));
+                g2d.draw(new Ellipse2D.Float((float) (ballEnd.x - radius), (float) (ballEnd.y - radius), (float) (radius * 2), (float) (radius * 2)));
+
+                Helpers.Intersection inter = Helpers.Intersection.handleIntersection(playerBounds, ballStart, ballEnd, ballRadius);
+                if (inter != null) {
+
+                    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    g2d.setColor(Color.LIGHT_GRAY);
+                    g2d.drawString("time: " + inter.time, 10, 20);
+
+                    g2d.setColor(Color.GRAY);
+                    g2d.draw(new Ellipse2D.Float((float) (inter.cx - radius), (float) (inter.cy - radius), (float) (radius * 2), (float) (radius * 2)));
+                    g2d.draw(new Line2D.Float(inter.cx, inter.cy, inter.cx + inter.nx * 20, inter.cy + inter.ny * 20));
+
+                    g2d.setColor(Color.RED);
+                    g2d.draw(new Ellipse2D.Float(inter.ix - 2, inter.iy - 2, 4, 4));
+
+                    // Project Future Position
+                    float remainingTime = 1.0f - inter.time;
+                    float dx = ballEnd.x - ballStart.x;
+                    float dy = ballEnd.y - ballStart.y;
+                    float dot = dx * inter.nx + dy * inter.ny;
+                    float ndx = dx - 2 * dot * inter.nx;
+                    float ndy = dy - 2 * dot * inter.ny;
+                    float newx = inter.cx + ndx * remainingTime;
+                    float newy = inter.cy + ndy * remainingTime;
+
+                    g2d.setColor(Color.darkGray);
+                    g2d.draw(new Ellipse2D.Float((float) (newx - radius), (float) (newy - radius), (float) (radius * 2), (float) (radius * 2)));
+                    g2d.draw(new Line2D.Float(inter.cx, inter.cy, newx, newy));
+                }
+            }
+        }
+
     }
 
     protected boolean collides(GameObject object) {
@@ -101,12 +150,14 @@ public class Ball extends GameObject{
             return false;
         }
 
-        double dx = getX() - player.hitBox.x;
-        double dy = getY() - player.hitBox.y;
-        double distance = Math.sqrt(dx * dx + dy * dy);
-
-        // Check if the distance is less than the sum of the ball's radius and half of the player's width/height
-        return distance < radius + (Math.max(player.hitBox.width, player.hitBox.height) / 2.0);
+//        Helpers.Vector2 ballCenter = getCenter();
+//        Helpers.Vector2 playerCenter = player.getCenter();
+//
+//        double distance = ballCenter.distance(playerCenter);
+//
+//        // Check if the distance is less than the sum of the ball's radius and half of the player's width/height
+//        return distance < radius + (Math.max(player.hitBox.width, player.hitBox.height) / 2.0);
+        return hitboxCircle.intersects(player.getHitBox());
     }
 
     public void startBounce() {

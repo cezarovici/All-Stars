@@ -34,7 +34,9 @@ public abstract class GameObject {
         moveY(y);
         moveX(x);
     }
-
+    public Helpers.Vector2 getCenter(){
+        return new Helpers.Vector2(x+sprite.getWidth()/2,y+ sprite.getHeight()/2);
+    }
     protected int getX(){
         return x;
     }

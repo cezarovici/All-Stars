@@ -18,14 +18,20 @@ public class Player extends GameObject {
     private PlayerControlTemplate playerControls;
     public Player(BufferedImage sprite, int x, int y,int hitBoxX,int hitBoxY) {
         super(sprite, x, y);
-        hitBox = new Rectangle(x,y,hitBoxX,hitBoxY);
-        bounds = new Helpers.Bounds(x,y,x+hitBoxX,y+hitBoxY);
+        int tempX = x + sprite.getWidth() / 2 -  hitBoxX / 2;
+        int tempY  = y + sprite.getHeight() /2 - hitBoxY/ 2;
+
+        hitBox = new Rectangle(tempX,tempY,hitBoxX,hitBoxY);
+        bounds = new Helpers.Bounds(tempX,tempY,tempX+hitBoxX,tempY+hitBoxY);
     }
 
     public void setKeys(int []keys){
         playerControls = new PlayerControlTemplate(keys);
     }
 
+    public Rectangle getHitBox(){
+        return new Rectangle(hitBox.x,hitBox.y,hitBox.width,hitBox.height);
+    }
     @Override
     public void Draw(Graphics graphics) {
         super.Draw(graphics);
@@ -34,7 +40,7 @@ public class Player extends GameObject {
         int tempX = x + sprite.getWidth() / 2 -  hitBox.width / 2;
         int tempY  = y + sprite.getHeight() /2 - hitBox.height/ 2;
 
-        graphics.drawRect(tempX, tempY, hitBox.width, hitBox.height);
+        graphics.drawRect(tempX,tempY, hitBox.width, hitBox.height);
     }
 
     @Override
@@ -42,9 +48,6 @@ public class Player extends GameObject {
         // Get the current position of the player
         int currentX = getX();
         int currentY = getY();
-
-        hitBox.y = this.y;
-        hitBox.x = this.x;
 
         // Calculate the new position of the player
         int newX = currentX + x;
@@ -82,7 +85,8 @@ public class Player extends GameObject {
     }
 
 
-    public Helpers.Vector2 getCenterOfPlayer(){
+    @Override
+    public Helpers.Vector2 getCenter(){
         return new Helpers.Vector2(hitBox.x+hitBox.width/2,hitBox.y+hitBox.height/2);
     }
 

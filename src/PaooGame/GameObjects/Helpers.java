@@ -11,7 +11,6 @@ public class Helpers {
             this.y = (int)y;
         }
 
-
         public float distance(Vector2 other)
         {
             float dx = other.x - x;
