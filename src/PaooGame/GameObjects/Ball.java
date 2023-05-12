@@ -90,21 +90,17 @@ public class Ball extends GameObject{
         for (GameObject obj : getGameObjects()) {
             if (obj instanceof Player) {
                 Helpers.Bounds playerBounds = new Helpers.Bounds(((Player) obj).bounds); /* player's bounding box coordinates */
+                g2d.setColor(Color.CYAN);
+                g2d.draw(new Rectangle2D.Double(playerBounds.left,playerBounds.top,playerBounds.getWidth(),playerBounds.getHeight()));
+                System.out.println(String.valueOf(playerBounds.left+playerBounds.top+playerBounds.getWidth()+playerBounds.getHeight()));
                 ;
                 Helpers.Vector2 ballEnd = obj.getCenter();  // Desired position of the ball after the hit
                 float ballRadius = (float) radius; /* radius of the ball */
-
-                g2d.setColor(Color.RED);
-                g2d.draw(((Player) obj).getHitBox());
 
                 g2d.setColor(Color.BLACK);
                 g2d.draw(new Line2D.Float(ballStart.x, ballStart.y, ballEnd.x, ballEnd.y));
 
                 g2d.setColor(Color.YELLOW);
-                Helpers.Vector2 radiusPoint = new Helpers.Vector2(ballStart.x, (float) (ballStart.y - radius));
-                float pointRadius = 8.0f;
-                g2d.setColor(Color.YELLOW);
-                g2d.draw(new Ellipse2D.Float(radiusPoint.x - pointRadius, radiusPoint.y - pointRadius, pointRadius * 2, pointRadius * 2));
                 g2d.draw(new Ellipse2D.Float((float) (ballStart.x - radius), (float) (ballStart.y - radius), (float) (radius * 2), (float) (radius * 2)));
                 g2d.draw(new Ellipse2D.Float((float) (ballEnd.x - radius), (float) (ballEnd.y - radius), (float) (radius * 2), (float) (radius * 2)));
 

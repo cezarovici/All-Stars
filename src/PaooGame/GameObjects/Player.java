@@ -35,12 +35,6 @@ public class Player extends GameObject {
     @Override
     public void Draw(Graphics graphics) {
         super.Draw(graphics);
-        graphics.setColor(Color.blue);
-
-        int tempX = x + sprite.getWidth() / 2 -  hitBox.width / 2;
-        int tempY  = y + sprite.getHeight() /2 - hitBox.height/ 2;
-
-        graphics.drawRect(tempX,tempY, hitBox.width, hitBox.height);
     }
 
     @Override
@@ -81,7 +75,8 @@ public class Player extends GameObject {
     public void setX(int x){
         super.setX(x);
         hitBox.x = x + sprite.getWidth() / 2 -  hitBox.width / 2;
-        bounds.updateX(x,hitBox.x);
+        bounds.left = hitBox.x;
+        bounds.right = hitBox.x + hitBox.width;
     }
 
 
@@ -94,7 +89,8 @@ public class Player extends GameObject {
     public void setY(int y){
         super.setY(y);
         hitBox.y = y + sprite.getHeight() /2 - hitBox.height/2;
-        bounds.updateY(y, hitBox.y);
+        bounds.top = hitBox.y;
+        bounds.bottom = hitBox.y + hitBox.height;
     }
     @Override
     public void update() {
@@ -150,6 +146,7 @@ public class Player extends GameObject {
         setY((int) newY);
         yVelocity = newYVelocity;
 
+        bounds.update(hitBox);
         move(deltaX, deltaY);
     }
     @Override

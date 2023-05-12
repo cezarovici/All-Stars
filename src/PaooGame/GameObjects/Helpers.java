@@ -1,5 +1,9 @@
 package PaooGame.GameObjects;
 
+import jdk.jfr.consumer.RecordedClass;
+
+import java.awt.*;
+
 public class Helpers {
     public static class Vector2
     {
@@ -42,18 +46,16 @@ public class Helpers {
 
         public Bounds(Bounds bounds) {
             this.left = bounds.left;
-            this.right = bounds.left;
+            this.right = bounds.right;
             this.top = bounds.top;
             this.bottom = bounds.bottom;
         }
 
-        public void updateX(float x,float xWidth){
-            this.left = x;
-            this.right = x + xWidth;
-        }
-        public void updateY(float y,float yHeigth){
-            this.top = y;
-            this.bottom = y+ yHeigth;
+        public void update(Rectangle rectangle){
+            this.left = rectangle.x;
+            this.top = rectangle.y;
+            this.right = rectangle.x+rectangle.width;
+            this.left = rectangle.y+rectangle.height;
         }
         public float getWidth()
         {
