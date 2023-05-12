@@ -25,7 +25,7 @@ public class Ball extends GameObject{
 
         this.vy = 0; // initialize velocity to 0
         this.isBouncing = false; // initialize bouncing flag to false
-        hitboxCircle = new Ellipse2D.Double(x,y,radius*2,radius*2);
+        hitboxCircle = new Ellipse2D.Double(x+sprite.getWidth()/2,y+sprite.getHeight()/2,radius*2,radius*2);
     }
 
 
@@ -38,7 +38,7 @@ public class Ball extends GameObject{
     }
 
     public void update() {
-        hitboxCircle.setFrame(getX(),getY(),radius*2,radius*2);
+        hitboxCircle.setFrame(x+sprite.getWidth()/2-radius,y+sprite.getHeight()/2-radius,radius*2,radius*2);
 
         if (isBouncing()) {
             // apply gravity to vertical velocity
@@ -86,9 +86,6 @@ public class Ball extends GameObject{
         // Draw the hitbox
         Helpers.Vector2 ballStart = getCenter();  // Current position of the ball
         Graphics2D g2d = (Graphics2D)g;
-        g.setColor(Color.BLUE);
-        //g2d.draw(new Ellipse2D.Float((float) (ballStart.x - radius), (float) (ballStart.y - radius), (float) (radius * 2), (float) (radius * 2)));
-        g2d.draw(hitboxCircle);
 
         for (GameObject obj : getGameObjects()) {
             if (obj instanceof Player) {
@@ -97,7 +94,7 @@ public class Ball extends GameObject{
                 Helpers.Vector2 ballEnd = obj.getCenter();  // Desired position of the ball after the hit
                 float ballRadius = (float) radius; /* radius of the ball */
 
-                g2d.setColor(Color.BLUE);
+                g2d.setColor(Color.RED);
                 g2d.draw(((Player) obj).getHitBox());
 
                 g2d.setColor(Color.BLACK);
@@ -150,13 +147,6 @@ public class Ball extends GameObject{
             return false;
         }
 
-//        Helpers.Vector2 ballCenter = getCenter();
-//        Helpers.Vector2 playerCenter = player.getCenter();
-//
-//        double distance = ballCenter.distance(playerCenter);
-//
-//        // Check if the distance is less than the sum of the ball's radius and half of the player's width/height
-//        return distance < radius + (Math.max(player.hitBox.width, player.hitBox.height) / 2.0);
         return hitboxCircle.intersects(player.getHitBox());
     }
 

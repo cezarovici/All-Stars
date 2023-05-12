@@ -80,7 +80,7 @@ public class Player extends GameObject {
     @Override
     public void setX(int x){
         super.setX(x);
-        hitBox.x = x;
+        hitBox.x = x + sprite.getWidth() / 2 -  hitBox.width / 2;
         bounds.updateX(x,hitBox.x);
     }
 
@@ -93,7 +93,7 @@ public class Player extends GameObject {
     @Override
     public void setY(int y){
         super.setY(y);
-        hitBox.y = y;
+        hitBox.y = y + sprite.getHeight() /2 - hitBox.height/2;
         bounds.updateY(y, hitBox.y);
     }
     @Override
