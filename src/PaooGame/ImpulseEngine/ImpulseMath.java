@@ -19,7 +19,7 @@
     Port to Java by Philip Diffenderfer http://magnos.org
 */
 
-package org.magnos.impulse;
+package PaooGame.ImpulseEngine;
 
 public class ImpulseMath
 {
