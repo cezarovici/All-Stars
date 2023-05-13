@@ -38,6 +38,10 @@ public class GameWindow
         wndFrame    = null;     /*!< Fereastra nu este construita.*/
     }
 
+    public static double GetFPS() {
+        return 60f;
+    }
+
     /*! \fn private void BuildGameWindow()
         \brief Construieste/creaza fereastra si seteaza toate proprietatile
         necesare: dimensiuni, pozitionare in centrul ecranului, operatia de

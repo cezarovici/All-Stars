@@ -32,15 +32,18 @@ public class Polygon extends Shape
 
 	public Polygon()
 	{
+		super();
 	}
 	
 	public Polygon( Vec2 ... verts)
 	{
+		super();
 		set( verts );
 	}
 	
 	public Polygon( float hw, float hh )
 	{
+		super();
 		setBox( hw, hh );
 	}
 	

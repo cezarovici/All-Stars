@@ -23,18 +23,31 @@ package PaooGame.ImpulseEngine;
 
 public abstract class Shape
 {
-
 	public enum Type
 	{
-		Circle, Poly, Count
+		Circle, Poly,
+	}
+
+	public Shape ShapeBuilder(Shape.Type type){
+		switch (type){
+			case Poly -> {
+				return new Polygon();
+			}
+			case Circle -> {
+				return new Circle((int) body.position.x, (int) body.position.y,radius);
+			}
+		}
+
+		return null;
 	}
 
 	public Body body;
 	public float radius;
 	public final Mat2 u = new Mat2();
 
-	public Shape()
+	public Shape(int x, int y)
 	{
+		body = new Body(x,y);
 	}
 
 	public abstract Shape clone();
@@ -46,5 +59,4 @@ public abstract class Shape
 	public abstract void setOrient( float radians );
 
 	public abstract Type getType();
-
 }

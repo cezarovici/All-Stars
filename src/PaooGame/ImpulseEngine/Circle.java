@@ -21,18 +21,22 @@
 
 package PaooGame.ImpulseEngine;
 
+import PaooGame.Game;
+import PaooGame.GameObjects.GameObject;
+
 public class Circle extends Shape
 {
 
-	public Circle( float r )
+	public Circle( int x ,int y,float r )
 	{
+		super(x,y);
 		radius = r;
 	}
 
 	@Override
 	public Shape clone()
 	{
-		return new Circle( radius );
+		return new Circle((int) body.position.x, (int) body.position.y,radius);
 	}
 
 	@Override

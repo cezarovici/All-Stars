@@ -21,6 +21,9 @@
 
 package PaooGame.ImpulseEngine;
 
+import PaooGame.Game;
+import PaooGame.GameObjects.GameObject;
+
 public class Body
 {
 
@@ -34,11 +37,10 @@ public class Body
 	public float staticFriction;
 	public float dynamicFriction;
 	public float restitution;
-	public final Shape shape;
 
-	public Body( Shape shape, int x, int y )
+
+	public Body(  int x, int y )
 	{
-		this.shape = shape;
 
 		position.set( x, y );
 		velocity.set( 0, 0 );
@@ -50,8 +52,6 @@ public class Body
 		dynamicFriction = 0.3f;
 		restitution = 0.2f;
 
-		shape.body = this;
-		shape.initialize();
 	}
 
 	public void applyForce( Vec2 f )
@@ -80,7 +80,6 @@ public class Body
 	public void setOrient( float radians )
 	{
 		orient = radians;
-		shape.setOrient( radians );
 	}
 
 }
