@@ -23,31 +23,30 @@ package PaooGame.ImpulseEngine;
 
 public abstract class Shape
 {
+	public Shape(int x, int y) {
+		body = new Body(this,x,y);
+	}
+
 	public enum Type
 	{
 		Circle, Poly,
 	}
 
-	public Shape ShapeBuilder(Shape.Type type){
-		switch (type){
-			case Poly -> {
-				return new Polygon();
-			}
-			case Circle -> {
-				return new Circle((int) body.position.x, (int) body.position.y,radius);
-			}
-		}
-
-		return null;
-	}
-
 	public Body body;
 	public float radius;
 	public final Mat2 u = new Mat2();
+	public Shape() {
+		
+	}
+	public static Shape ShapeBuilder(Shape.Type type){
+		if (type == Type.Circle)
+			return new Circle();
 
-	public Shape(int x, int y)
-	{
-		body = new Body(x,y);
+		return new Polygon();
+	}
+
+	public void setBody(Body body) {
+		this.body = body;
 	}
 
 	public abstract Shape clone();

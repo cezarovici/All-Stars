@@ -468,4 +468,13 @@ public class Vec2
 		return array;
 	}
 
+	public float getY() {
+		return y;
+	}
+
+	public float getX() {
+		return x;
+	}
+
+
 }

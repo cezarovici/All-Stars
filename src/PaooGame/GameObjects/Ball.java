@@ -13,18 +13,19 @@ import java.awt.image.BufferedImage;
 public class Ball extends GameObject {
 
     private static Ball instance;
-    public Ball(BufferedImage sprite, int x, int y,float radius,Shape shape) {
-        super(sprite,x,y,shape);
+    public Ball(BufferedImage sprite, int x, int y, float radius) {
+        super(sprite,x,y,Shape.Type.Circle);
         shape.radius = radius;
     }
 
-    public static Ball getInstance(BufferedImage sprite, int x, int y, float radius,Shape shape) {
+    public static Ball getInstance(BufferedImage sprite, int x, int y, float radius) {
         if (instance == null) {
-            instance = new Ball(sprite, x, y,radius,shape);
+            instance = new Ball(sprite, x, y,radius);
         }
 
         return instance;
     }
+
 
     @Override
     public void Draw(Graphics graphics){
@@ -34,4 +35,16 @@ public class Ball extends GameObject {
     protected boolean collides(GameObject object) {
         return false;
     }
+
+    @Override
+    public void move(int x, int y) {
+
+    }
+
+    @Override
+    public Helpers.Vector2 getCenter() {
+        return null;
+    }
 }
+
+

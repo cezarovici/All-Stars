@@ -1,6 +1,7 @@
 package PaooGame.GameObjects;
 
 import PaooGame.GameWindow.GameWindow;
+import PaooGame.ImpulseEngine.Shape;
 import PaooGame.UserInterface.Keyboard;
 
 import java.awt.*;
@@ -17,7 +18,7 @@ public class Player extends GameObject {
     public Helpers.Bounds bounds;
     private PlayerControlTemplate playerControls;
     public Player(BufferedImage sprite, int x, int y,int hitBoxX,int hitBoxY) {
-        super(sprite, x, y);
+        super(sprite, x, y, Shape.Type.Poly);
         int tempX = x + sprite.getWidth() / 2 -  hitBoxX / 2;
         int tempY  = y + sprite.getHeight() /2 - hitBoxY/ 2;
 
@@ -155,7 +156,6 @@ public class Player extends GameObject {
             Rectangle rect1 = this.hitBox;
             Rectangle rect2 = ((Player) other).hitBox;
 
-            System.out.println(rect1.intersects(rect2));
             return rect1.intersects(rect2);
         }
 
