@@ -5,8 +5,13 @@ import PaooGame.GameObjects.Basket;
 import PaooGame.GameObjects.Player;
 import PaooGame.GameWindow.GameWindow;
 import PaooGame.Graphics.*;
+import PaooGame.ImpulseEngine.*;
+import PaooGame.ImpulseEngine.Polygon;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+import java.awt.geom.Path2D;
 import java.awt.image.BufferStrategy;
 import java.util.*;
 
@@ -85,6 +90,8 @@ public class Game implements Runnable
     Basket basketLeft,basketRight;
     Clock clock;
     Ball ball;
+
+    ImpulseScene impulseScene;
     public Game(String title, int width, int height)
     {
             /// Obiectul GameWindow este creat insa fereastra nu este construita
@@ -110,6 +117,7 @@ public class Game implements Runnable
             /// Se incarca toate elementele grafice (dale)
         Assets.Init();
 
+        impulseScene = Assets.impulseScene;
         background = Assets.field1;
         player1 = Assets.playerLeft;
         player2 = Assets.playerRight;
@@ -237,6 +245,7 @@ public class Game implements Runnable
         player1.update();
         player2.update();
         ball.update();
+        impulseScene.update();
 
         for (RunningAd ad : runningAds) {
             ad.update();
@@ -292,9 +301,43 @@ public class Game implements Runnable
 
         ball.Draw(g);
 
+        Graphics2D g2d = (Graphics2D) bs.getDrawGraphics();
+        for (Body b : impulseScene.bodies)
+        {
+            System.out.println("body"+b.shape);
+            if (b.shape instanceof Circle c)
+            {
+                float rx = (float)StrictMath.cos( b.orient ) * c.radius;
+                float ry = (float)StrictMath.sin( b.orient ) * c.radius;
+
+                g2d.setColor( Color.red );
+                g2d.draw( new Ellipse2D.Float( b.position.x - c.radius, b.position.y - c.radius, c.radius * 2, c.radius * 2 ) );
+                g2d.draw( new Line2D.Float( b.position.x, b.position.y, b.position.x + rx, b.position.y + ry ) );
+            }
+            else if (b.shape instanceof Polygon p)
+            {
+                g2d.setColor( Color.blue );
+                p.Draw(g2d);
+            }
+
+
+            g2d.setColor( Color.BLACK );
+            for (Manifold m : impulseScene.contacts)
+            {
+                for (int i = 0; i < m.contactCount; i++)
+                {
+                    System.out.println("CONTATCTTT");
+
+                    Vec2 v = m.contacts[i];
+                    Vec2 n = m.normal;
+
+                    g2d.draw( new Line2D.Float( v.x, v.y, v.x + n.x * 4.0f, v.y + n.y * 4.0f ) );
+                }
+            }
         bs.show();
 
         g.dispose();
     }
+}
 }
 

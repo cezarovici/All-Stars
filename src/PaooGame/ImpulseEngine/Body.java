@@ -42,6 +42,8 @@ public class Body
 
 	public Body( Shape shape,int x, int y )
 	{
+		this.shape = shape;
+
 		position.set( x, y );
 		velocity.set( 0, 0 );
 		angularVelocity = 0;
@@ -51,8 +53,6 @@ public class Body
 		staticFriction = 0.5f;
 		dynamicFriction = 0.3f;
 		restitution = 0.2f;
-
-		this.shape = shape;
 
 		shape.body = this;
 		shape.initialize();;
@@ -73,6 +73,10 @@ public class Body
 		angularVelocity += invInertia * Vec2.cross( contactVector, impulse );
 	}
 
+	public Vec2 getPosition(){
+		return  position;
+	}
+
 	public void setStatic()
 	{
 		inertia = 0.0f;
@@ -86,4 +90,10 @@ public class Body
 		orient = radians;
 	}
 
+	public void print(){
+		System.out.println("\nMass" +mass+
+				"\nInvMass:"+invMass+
+				"\nInertia:"+inertia+
+				"\nInvInertia:"+invInertia);
+	}
 }

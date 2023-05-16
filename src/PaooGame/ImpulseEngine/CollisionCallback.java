@@ -24,5 +24,5 @@ package PaooGame.ImpulseEngine;
 public interface CollisionCallback
 {
 
-	public void handleCollision( Manifold m, Body a, Body b );
+	void handleCollision( Manifold m, Body a, Body b );
 }

@@ -4,17 +4,15 @@ import PaooGame.GameObjects.Ball;
 import PaooGame.GameObjects.Basket;
 import PaooGame.GameObjects.Player;
 import PaooGame.GameWindow.GameWindow;
+import PaooGame.ImpulseEngine.Body;
+import PaooGame.ImpulseEngine.ImpulseMath;
+import PaooGame.ImpulseEngine.ImpulseScene;
+import PaooGame.ImpulseEngine.Polygon;
 
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-
-/*! \class public class Assets
-    \brief Clasa incarca fiecare element grafic necesar jocului.
-
-    Game assets include tot ce este folosit intr-un joc: imagini, sunete, harti etc.
- */
 public class Assets
 {
         /// Referinte catre elementele grafice (dale) utilizate in joc.
@@ -29,15 +27,8 @@ public class Assets
     public static ArrayList<RunningAd> runningAds = new ArrayList<>();;
     public static Fan []fans = new Fan[100];
     public static Clock clock;
+    public static ImpulseScene impulseScene;
     public static Ball ball;
-
-    /*! \fn public static void Init()
-        \brief Functia initializaza referintele catre elementele grafice utilizate.
-
-        Aceasta functie poate fi rescrisa astfel incat elementele grafice incarcate/utilizate
-        sa fie parametrizate. Din acest motiv referintele nu sunt finale.
-     */
-
 
     public static  final int hitBoxBall = 75;
 
@@ -67,6 +58,20 @@ public class Assets
 
         basketLeft = new Basket(ImageLoader.LoadImage("/textures/basketSpriteLeft.png"),0,1080-450-234,hitBoxXBasket,hitBoxYBasket);            // todo make this constants
         basketRight = new Basket(ImageLoader.LoadImage("/textures/basketSpriteRight.png"),1920-163,1080-450-234,hitBoxXBasket,hitBoxYBasket);   // todo make this constants
+
+        impulseScene = new ImpulseScene(ImpulseMath.DT,10);
+        impulseScene.add(playerLeft.shape,0,1080/2);
+        impulseScene.add(playerRight.shape,1920,1080/2);
+
+        Body b = null;
+        b = impulseScene.add( new Polygon( (float)240,(float)GameWindow.GetWndHeight()/2+200,500.0f, 10.0f ), 240, GameWindow.GetWndHeight()/2+200 );
+        b.setStatic();
+        b.setOrient( 0 );
+
+        b = impulseScene.add(ball.shape,GameWindow.GetWndWidth()/2,GameWindow.GetWndHeight()/2);
+        b.setOrient( ImpulseMath.random( -ImpulseMath.PI, ImpulseMath.PI ) );
+        b.invInertia = 5;
+        b.restitution =5f;
 
         runningAds.add(wizardGame2Add);
         runningAds.add(yourAddHere);

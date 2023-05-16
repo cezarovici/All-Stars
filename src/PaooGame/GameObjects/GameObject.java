@@ -1,6 +1,8 @@
 package PaooGame.GameObjects;
 
 import PaooGame.ImpulseEngine.Body;
+import PaooGame.ImpulseEngine.ImpulseMath;
+import PaooGame.ImpulseEngine.Polygon;
 import PaooGame.ImpulseEngine.Shape;
 
 import java.awt.*;
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 
 public abstract class GameObject {
     protected final BufferedImage sprite;
-    protected Shape shape;
+    public Shape shape;
     public static ArrayList<GameObject> gameObjects = new ArrayList<>();
     // array of game objects
 
@@ -47,8 +49,9 @@ public abstract class GameObject {
     }
 
     public void update(){
-
-     }
+        setY((int) shape.body.getPosition().y);
+        setX((int)shape.body.getPosition().x);
+    }
 
      public int getX(){
         return (int) shape.body.position.getX();
@@ -56,5 +59,8 @@ public abstract class GameObject {
 
      public int getY(){
         return (int) shape.body.position.getY();
+    }
+    public void print(){
+        shape.body.print();
     }
 }

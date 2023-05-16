@@ -1,6 +1,7 @@
 package PaooGame.GameObjects;
 
 import PaooGame.GameWindow.GameWindow;
+import PaooGame.ImpulseEngine.Polygon;
 import PaooGame.ImpulseEngine.Shape;
 import PaooGame.UserInterface.Keyboard;
 
@@ -22,8 +23,11 @@ public class Player extends GameObject {
         int tempX = x + sprite.getWidth() / 2 -  hitBoxX / 2;
         int tempY  = y + sprite.getHeight() /2 - hitBoxY/ 2;
 
+
         hitBox = new Rectangle(tempX,tempY,hitBoxX,hitBoxY);
         bounds = new Helpers.Bounds(tempX,tempY,tempX+hitBoxX,tempY+hitBoxY);
+
+        ((Polygon) shape).setBox(hitBox.x,hitBox.y,hitBox.width,hitBox.height);
     }
 
     public void setKeys(int []keys){
@@ -38,6 +42,9 @@ public class Player extends GameObject {
         super.Draw(graphics);
     }
 
+    public boolean isJumping(){
+        return isJumping;
+    }
     @Override
     public void move(int x, int y) {
         // Get the current position of the player
@@ -95,6 +102,9 @@ public class Player extends GameObject {
     }
     @Override
     public void update() {
+        if (isJumping()){
+            super.update();
+        }
 
         int deltaY = 0, deltaX = 0;
 

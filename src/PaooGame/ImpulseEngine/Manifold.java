@@ -42,6 +42,7 @@ public class Manifold
 
 	public void solve()
 	{
+
 		int ia = A.shape.getType().ordinal();
 		int ib = B.shape.getType().ordinal();
 
@@ -110,12 +111,12 @@ public class Manifold
 			// real contactVel = Dot( rv, normal );
 			float contactVel = Vec2.dot( rv, normal );
 
+
 			// Do not resolve if velocities are separating
 			if (contactVel > 0)
 			{
 				return;
 			}
-
 			// real raCrossN = Cross( ra, normal );
 			// real rbCrossN = Cross( rb, normal );
 			// real invMassSum = A->im + B->im + Sqr( raCrossN ) * A->iI + Sqr(

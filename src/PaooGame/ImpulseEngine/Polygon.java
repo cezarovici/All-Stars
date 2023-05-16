@@ -21,10 +21,14 @@
 
 package PaooGame.ImpulseEngine;
 
+import java.awt.*;
+import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
+
 public class Polygon extends Shape
 {
 
-	public static final int MAX_POLY_VERTEX_COUNT = 64;
+	public static final int MAX_POLY_VERTEX_COUNT = 4;
 
 	public int vertexCount;
 	public Vec2[] vertices = Vec2.arrayOf( MAX_POLY_VERTEX_COUNT );
@@ -41,25 +45,16 @@ public class Polygon extends Shape
 		set( verts );
 	}
 	
-	public Polygon( float hw, float hh )
+	public Polygon( float x, float y,float hx,float hy )
 	{
 		super();
-		setBox( hw, hh );
+		setBox( x, y ,hx,hy );
 	}
-	
+
+
 	@Override
 	public Shape clone()
 	{
-//		PolygonShape *poly = new PolygonShape( );
-//	    poly->u = u;
-//	    for(uint32 i = 0; i < m_vertexCount; ++i)
-//	    {
-//	      poly->m_vertices[i] = m_vertices[i];
-//	      poly->m_normals[i] = m_normals[i];
-//	    }
-//	    poly->m_vertexCount = m_vertexCount;
-//	    return poly;
-
 		Polygon p = new Polygon();
 		p.u.set( u );
 		for (int i = 0; i < vertexCount; i++)
@@ -136,17 +131,16 @@ public class Polygon extends Shape
 		return Type.Poly;
 	}
 
-	public void setBox( float hw, float hh )
+	public void setBox( float x, float y,float width,float height)
 	{
 		vertexCount = 4;
-		vertices[0].set( -hw, -hh );
-		vertices[1].set( hw, -hh );
-		vertices[2].set( hw, hh );
-		vertices[3].set( -hw, hh );
-		normals[0].set( 0.0f, -1.0f );
-		normals[1].set( 1.0f, 0.0f );
-		normals[2].set( 0.0f, 1.0f );
-		normals[3].set( -1.0f, 0.0f );
+		Polygon rectangle = new Polygon();
+		rectangle.set(
+				new Vec2(x, y),
+				new Vec2(x + width, y),
+				new Vec2(x + width, y + height),
+				new Vec2(x, y + height)
+		);
 	}
 
 	public void set( Vec2... verts )
@@ -240,6 +234,14 @@ public class Polygon extends Shape
 			// Calculate normal with 2D cross product between vector and scalar
 			normals[i].set( face.y, -face.x );
 			normals[i].normalize();
+		}
+	}
+
+	public  void Draw(Graphics2D gr){
+		System.out.println(vertexCount);
+		for (int i = 0; i < vertexCount; i++) {
+			Vec2 vertex = vertices[i];
+			System.out.println("Vertex " + i + ": (" + vertex.x + ", " + vertex.y + ")");
 		}
 	}
 

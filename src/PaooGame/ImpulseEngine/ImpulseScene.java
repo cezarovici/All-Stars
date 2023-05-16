@@ -21,6 +21,8 @@
 
 package PaooGame.ImpulseEngine;
 
+import PaooGame.GameObjects.GameObject;
+
 import java.util.ArrayList;
 
 
@@ -38,7 +40,7 @@ public class ImpulseScene
 		this.iterations = iterations;
 	}
 
-	public void step()
+	public void update()
 	{
 		// Generate new collision info
 		contacts.clear();
@@ -107,10 +109,11 @@ public class ImpulseScene
 		}
 	}
 
-	public Body add( Shape shape, int x, int y )
+	public Body add(Shape gameObject, int x, int y )
 	{
-		Body b = new Body( shape, x, y );
+		Body b = new Body( gameObject, x, y );
 		bodies.add( b );
+
 		return b;
 	}
 
