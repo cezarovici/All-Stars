@@ -29,7 +29,6 @@ public class CollisionCirclePolygon implements CollisionCallback
 	@Override
 	public void handleCollision( Manifold m, Body a, Body b )
 	{
-		System.out.println("rircle polinom");
 		Circle A = (Circle)a.shape;
 		Polygon B = (Polygon)b.shape;
 

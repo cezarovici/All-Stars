@@ -123,4 +123,11 @@ public class GameWindow
     public Canvas GetCanvas() {
         return canvas;
     }
+
+    public void CloseWindow() {
+        if (wndFrame != null) {
+            wndFrame.dispose();
+            System.exit(0);
+        }
+    }
 }

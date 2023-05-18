@@ -8,6 +8,10 @@ import PaooGame.Graphics.*;
 import PaooGame.ImpulseEngine.*;
 import PaooGame.ImpulseEngine.Polygon;
 
+import PaooGame.UserInterface.Keyboard;
+import PaooGame.UserInterface.Menu;
+
+import static java.awt.event.KeyEvent.*;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
@@ -15,39 +19,6 @@ import java.awt.geom.Path2D;
 import java.awt.image.BufferStrategy;
 import java.util.*;
 
-/*! \class Game
-    \brief Clasa principala a intregului proiect. Implementeaza Game - Loop (Update -> Draw)
-
-                ------------
-                |           |
-                |     ------------
-    60 times/s  |     |  Update  |  -->{ actualizeaza variabile, stari, pozitii ale elementelor grafice etc.
-        =       |     ------------
-     16.7 ms    |           |
-                |     ------------
-                |     |   Draw   |  -->{ deseneaza totul pe ecran
-                |     ------------
-                |           |
-                -------------
-    Implementeaza interfata Runnable:
-
-        public interface Runnable {
-            public void run();
-        }
-
-    Interfata este utilizata pentru a crea un nou fir de executie avand ca argument clasa Game.
-    Clasa Game trebuie sa aiba definita metoda "public void run()", metoda ce va fi apelata
-    in noul thread(fir de executie). Mai multe explicatii veti primi la curs.
-
-    In mod obisnuit aceasta clasa trebuie sa contina urmatoarele:
-        - public Game();            //constructor
-        - private void init();      //metoda privata de initializare
-        - private void update();    //metoda privata de actualizare a elementelor jocului
-        - private void draw();      //metoda privata de desenare a tablei de joc
-        - public run();             //metoda publica ce va fi apelata de noul fir de executie
-        - public synchronized void start(); //metoda publica de pornire a jocului
-        - public synchronized void stop()   //metoda publica de oprire a jocului
- */
 public class Game implements Runnable
 {
     private ArrayList<RunningAd> runningAds;
@@ -74,23 +45,22 @@ public class Game implements Runnable
 
 
 
-    /*! \fn public Game(String title, int width, int height)
-        \brief Constructor de initializare al clasei Game.
+    public enum GameState {
+        MENU_Start,
+        MENU_Levels,
 
-        Acest constructor primeste ca parametri titlul ferestrei, latimea si inaltimea
-        acesteia avand in vedere ca fereastra va fi construita/creata in cadrul clasei Game.
+        PLAYING
+    }
 
-        \param title Titlul ferestrei.
-        \param width Latimea ferestrei in pixeli.
-        \param height Inaltimea ferestrei in pixeli.
-     */
+    private GameState currentState = GameState.MENU_Start;
 
     Player player1,player2;
     Fan[] fans;
     Basket basketLeft,basketRight;
     Clock clock;
     Ball ball;
-
+    Menu menu;
+    Menu levels;
     ImpulseScene impulseScene;
     public Game(String title, int width, int height)
     {
@@ -133,6 +103,9 @@ public class Game implements Runnable
         clock = Assets.clock;
 
         ball = Assets.ball;
+
+        menu = Assets.menu;
+        levels = Assets.levels;
     }
 
     /*! \fn public void run()
@@ -218,8 +191,8 @@ public class Game implements Runnable
                 /// Metoda join() arunca exceptii motiv pentru care trebuie incadrata intr-un block try - catch.
             try
             {
-                    /// Metoda join() pune un thread in asteptare panca cand un altul isi termina executie.
-                    /// Totusi, in situatia de fata efectul apelului este de oprire a threadului.
+                // Clean up and shutdown operations
+                wnd.CloseWindow(); // Close the game window
                 gameThread.join();
             }
             catch(InterruptedException ex)
@@ -242,13 +215,42 @@ public class Game implements Runnable
      */
     private void Update()
     {
-        player1.update();
-        player2.update();
-        ball.update();
-        impulseScene.update();
+        if (currentState == GameState.MENU_Start){
+            if (menu.StartGame()){
+                currentState = GameState.PLAYING;
+                menu.start = false;
+            }
 
-        for (RunningAd ad : runningAds) {
-            ad.update();
+            if(menu.Levels()){
+                currentState = GameState.MENU_Levels;
+                levels.start = false;
+            }
+
+            if (menu.StopGame()){
+                StopGame();
+            }
+        }
+        if (currentState == GameState.MENU_Levels){
+            if (Keyboard.isKeyPressed(VK_ESCAPE)){
+                currentState = GameState.MENU_Start;
+                menu.start = true;
+                menu.levels = false;
+                levels.start = false;
+            }
+        }
+        else {
+            player1.update();
+            player2.update();
+            ball.update();
+            impulseScene.update();
+
+            for (RunningAd ad : runningAds) {
+                ad.update();
+            }
+
+            if (Keyboard.isKeyPressed(VK_ESCAPE)){
+                currentState = GameState.MENU_Start;
+            }
         }
     }
 
@@ -282,62 +284,45 @@ public class Game implements Runnable
             /// Se sterge ce era
         g.clearRect(0, 0, wnd.GetWndWidth(), wnd.GetWndHeight());
 
-        for (RunningAd ad : runningAds) {
-            ad.draw(g);
-        }
+      if (currentState==GameState.MENU_Start) {
+          menu.draw(g);
 
-        for (Fan fan : fans) {
-            fan.Draw(g);
-        }
+          g.setColor(Color.BLACK);
+          g.setFont(new Font(Font.SANS_SERIF,Font.ITALIC,30));
+          g.drawString("Navigate with ARROWS",GameWindow.GetWndWidth()/2-100,100);
+      }else if(currentState==GameState.MENU_Levels){
+          levels.draw(g);
 
-        background.Draw(g);
+          g.setColor(Color.BLACK);
+          g.setFont(new Font(Font.SANS_SERIF,Font.ITALIC,30));
+          g.drawString("ESC - move back to Main menu",GameWindow.GetWndWidth()/2-100,100);
+      }else {
+          for (RunningAd ad : runningAds) {
+              ad.draw(g);
+          }
 
-        player1.Draw(g);
-        player2.Draw(g);
+          for (Fan fan : fans) {
+              fan.Draw(g);
+          }
 
-        basketRight.Draw(g);
-        basketLeft.Draw(g);
-        clock.draw(g);
+          background.Draw(g);
 
-        ball.Draw(g);
+          player1.Draw(g);
+          player2.Draw(g);
 
-        Graphics2D g2d = (Graphics2D) bs.getDrawGraphics();
-        for (Body b : impulseScene.bodies)
-        {
-            System.out.println("body"+b.shape);
-            if (b.shape instanceof Circle c)
-            {
-                float rx = (float)StrictMath.cos( b.orient ) * c.radius;
-                float ry = (float)StrictMath.sin( b.orient ) * c.radius;
+          basketRight.Draw(g);
+          basketLeft.Draw(g);
+          clock.draw(g);
 
-                g2d.setColor( Color.red );
-                g2d.draw( new Ellipse2D.Float( b.position.x - c.radius, b.position.y - c.radius, c.radius * 2, c.radius * 2 ) );
-                g2d.draw( new Line2D.Float( b.position.x, b.position.y, b.position.x + rx, b.position.y + ry ) );
-            }
-            else if (b.shape instanceof Polygon p)
-            {
-                g2d.setColor( Color.blue );
-                p.Draw(g2d);
-            }
+          ball.Draw(g);
 
+          impulseScene.Draw((Graphics2D) g);
+      }
 
-            g2d.setColor( Color.BLACK );
-            for (Manifold m : impulseScene.contacts)
-            {
-                for (int i = 0; i < m.contactCount; i++)
-                {
-                    System.out.println("CONTATCTTT");
-
-                    Vec2 v = m.contacts[i];
-                    Vec2 n = m.normal;
-
-                    g2d.draw( new Line2D.Float( v.x, v.y, v.x + n.x * 4.0f, v.y + n.y * 4.0f ) );
-                }
-            }
         bs.show();
 
         g.dispose();
     }
-}
+
 }
 

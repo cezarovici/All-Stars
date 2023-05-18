@@ -1,11 +1,11 @@
 package PaooGame.GameObjects;
 
 import PaooGame.ImpulseEngine.Body;
-import PaooGame.ImpulseEngine.ImpulseMath;
-import PaooGame.ImpulseEngine.Polygon;
 import PaooGame.ImpulseEngine.Shape;
+import PaooGame.UserInterface.Mouse;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -51,6 +51,13 @@ public abstract class GameObject {
     public void update(){
         setY((int) shape.body.getPosition().y);
         setX((int)shape.body.getPosition().x);
+    }
+
+    public void moveByMouse(Mouse mouse){
+        if (mouse.mouseUp[MouseEvent.BUTTON1]){
+            setY(mouse.mouseY);
+            setX(mouse.mouseX);
+        }
     }
 
      public int getX(){

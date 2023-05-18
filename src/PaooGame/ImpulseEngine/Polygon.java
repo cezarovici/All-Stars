@@ -23,12 +23,12 @@ package PaooGame.ImpulseEngine;
 
 import java.awt.*;
 import java.awt.geom.Path2D;
-import java.awt.geom.Rectangle2D;
+import java.util.Arrays;
 
 public class Polygon extends Shape
 {
 
-	public static final int MAX_POLY_VERTEX_COUNT = 4;
+	public static final int MAX_POLY_VERTEX_COUNT = 5;
 
 	public int vertexCount;
 	public Vec2[] vertices = Vec2.arrayOf( MAX_POLY_VERTEX_COUNT );
@@ -134,13 +134,16 @@ public class Polygon extends Shape
 	public void setBox( float x, float y,float width,float height)
 	{
 		vertexCount = 4;
-		Polygon rectangle = new Polygon();
-		rectangle.set(
-				new Vec2(x, y),
-				new Vec2(x + width, y),
-				new Vec2(x + width, y + height),
-				new Vec2(x, y + height)
-		);
+		vertices[1].set(x + width, y);//2
+		vertices[2].set(x + width, y + height);//3
+		vertices[3].set(x, y + height); //4
+		vertices[0].set(x, y); // 1
+
+		normals[0].set( 0.0f, -1.0f );
+		normals[1].set( 1.0f, 0.0f );
+		normals[2].set( 0.0f, 1.0f );
+		normals[3].set( -1.0f, 0.0f );
+
 	}
 
 	public void set( Vec2... verts )
@@ -237,7 +240,7 @@ public class Polygon extends Shape
 		}
 	}
 
-	public  void Draw(Graphics2D gr){
+	public  void print(){
 		System.out.println(vertexCount);
 		for (int i = 0; i < vertexCount; i++) {
 			Vec2 vertex = vertices[i];
@@ -245,6 +248,52 @@ public class Polygon extends Shape
 		}
 	}
 
+
+	public void Draw(Graphics2D graphics){
+		Polygon p = this;
+		Body b = p.body;
+
+	// Assuming p.vertexCount is 4, you can access the four corners directly
+			Vec2 v0 = new Vec2(p.vertices[0]);
+			Vec2 v1 = new Vec2(p.vertices[1]);
+			Vec2 v2 = new Vec2(p.vertices[2]);
+			Vec2 v3 = new Vec2(p.vertices[3]);
+
+			p.print();
+
+		b.shape.u.muli(v0);
+		b.shape.u.muli(v1);
+		b.shape.u.muli(v2);
+		b.shape.u.muli(v3);
+		v0.addi(b.position);
+		v1.addi(b.position);
+		v2.addi(b.position);
+		v3.addi(b.position);
+
+	// Calculate the minimum and maximum x and y values
+			float minX = Math.min(Math.min(v0.x, v1.x), Math.min(v2.x, v3.x));
+			float maxX = Math.max(Math.max(v0.x, v1.x), Math.max(v2.x, v3.x));
+			float minY = Math.min(Math.min(v0.y, v1.y), Math.min(v2.y, v3.y));
+			float maxY = Math.max(Math.max(v0.y, v1.y), Math.max(v2.y, v3.y));
+
+	// Calculate the width and height of the rectangle
+			float width = maxX - minX;
+			float height = maxY - minY;
+
+	// Draw the rectangle
+			graphics.setColor(Color.GREEN);
+			graphics.drawRect((int)minX, (int)minY, (int)width, (int)height);
+
+	// Draw the text at the center of the rectangle
+			graphics.setColor(Color.BLACK);
+			FontMetrics fontMetrics = graphics.getFontMetrics();
+			int textWidth = fontMetrics.stringWidth("Aici");
+			int textHeight = fontMetrics.getHeight();
+			int textX = (int)(minX + (width - textWidth) / 2);
+			int textY = (int)(minY + (height - textHeight) / 2 + fontMetrics.getAscent());
+			graphics.drawString("Aici", textX, textY);
+			graphics.setColor( Color.blue );
+	}
 	public Vec2 getSupport( Vec2 dir )
 	{
 		float bestProjection = -Float.MAX_VALUE;

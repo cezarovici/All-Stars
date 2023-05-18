@@ -96,4 +96,10 @@ public class Body
 				"\nInertia:"+inertia+
 				"\nInvInertia:"+invInertia);
 	}
+
+	public float getOrient(){
+		return orient;
+	}
+
+
 }

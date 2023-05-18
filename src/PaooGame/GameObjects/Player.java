@@ -3,9 +3,12 @@ package PaooGame.GameObjects;
 import PaooGame.GameWindow.GameWindow;
 import PaooGame.ImpulseEngine.Polygon;
 import PaooGame.ImpulseEngine.Shape;
+import PaooGame.ImpulseEngine.Vec2;
 import PaooGame.UserInterface.Keyboard;
+import PaooGame.UserInterface.Mouse;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 public class Player extends GameObject {
@@ -27,7 +30,14 @@ public class Player extends GameObject {
         hitBox = new Rectangle(tempX,tempY,hitBoxX,hitBoxY);
         bounds = new Helpers.Bounds(tempX,tempY,tempX+hitBoxX,tempY+hitBoxY);
 
-        ((Polygon) shape).setBox(hitBox.x,hitBox.y,hitBox.width,hitBox.height);
+
+        Vec2 v1 = new Vec2(hitBox.x,hitBox.y);
+        Vec2 v2 = new Vec2(hitBox.x+hitBoxX,hitBox.y);
+        Vec2 v3 = new Vec2(hitBox.x+hitBoxX,hitBox.y+hitBoxY);
+        Vec2 v4 = new Vec2(hitBox.x,hitBox.y+hitBoxY);
+
+        ((Polygon) shape).set(v1,v2,v3,v4);
+        ((Polygon) shape).print();
     }
 
     public void setKeys(int []keys){
@@ -102,9 +112,7 @@ public class Player extends GameObject {
     }
     @Override
     public void update() {
-        if (isJumping()){
-            super.update();
-        }
+     // super.update();
 
         int deltaY = 0, deltaX = 0;
 
@@ -171,5 +179,4 @@ public class Player extends GameObject {
 
         return false;
     }
-
 }

@@ -21,8 +21,9 @@
 
 package PaooGame.ImpulseEngine;
 
-import PaooGame.GameObjects.GameObject;
-
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 
 
@@ -176,4 +177,24 @@ public class ImpulseScene
 		integrateForces( b, dt );
 	}
 
+	public void Draw(Graphics2D g2d) {
+		for (Body b : bodies) {
+			if (b.shape instanceof Circle c) {
+				c.Draw(g2d);
+			} else if (b.shape instanceof Polygon p) {
+				g2d.setColor(Color.blue);
+				p.Draw(g2d);
+			}
+
+			g2d.setColor(Color.BLACK);
+			for (Manifold m : contacts) {
+				for (int i = 0; i < m.contactCount; i++) {
+					Vec2 v = m.contacts[i];
+					Vec2 n = m.normal;
+
+					g2d.draw(new Line2D.Float(v.x, v.y, v.x + n.x * 4.0f, v.y + n.y * 4.0f));
+				}
+			}
+		}
+	}
 }

@@ -6,26 +6,60 @@ public class Option {
     private String text;
     private Color color;
     private Font font;
-    private Rectangle option;
-    private Graphics2D graphics;
-    private int x;
-    private int y;
+    private Rectangle bounds;
 
-    public Option(String text, Color color, Font font,int width,int height, int x, int y) {
+    public boolean isActive;
+
+    public Option(String text, Color color, Font font, int width, int height) {
         this.text = text;
-        setGraphics(font,color);
-        option = new Rectangle(x,y, width,height);
+        this.color = color;
+        this.font = font;
+
+        this.bounds = new Rectangle();
+        this.bounds.width = width;
+        this.bounds.height = height;
     }
 
-    public void setGraphics(Font font, Color color) {
-        graphics.setFont(font);
-        graphics.setColor(color);
+
+    public String getText() {
+        return text;
     }
 
-    public void Draw(Graphics graphics){
-        Graphics2D graphics2d = (Graphics2D) graphics;
+    public void setColor(Color color) {
+        this.color = color;
+    }
 
-        graphics.drawString(text,x+x/2,y+y/2);
-        graphics2d.draw(option);
+
+
+    public void setActive(){
+        isActive = true;
+    }
+
+    public void unActive(){
+        isActive = false;
+    }
+
+    public void setFont(Font font) {
+        this.font = font;
+    }
+
+    public Rectangle getBounds() {
+        return bounds;
+    }
+
+    public void setBounds(Rectangle bounds) {
+        this.bounds = bounds;
+    }
+
+    public void setPosition(int x, int y) {
+        bounds.setLocation(x, y);
+    }
+
+    public void draw(Graphics graphics) {
+        Graphics2D g2d = (Graphics2D) graphics;
+
+        g2d.setColor(color);
+        g2d.setFont(font);
+        g2d.drawString(text, bounds.x+ bounds.width/2-text.length(), bounds.y+bounds.height/2-text.length());
     }
 }
