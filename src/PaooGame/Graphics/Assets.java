@@ -1,14 +1,17 @@
 package PaooGame.Graphics;
 
+import PaooGame.DataBase.DataBaseManager;
 import PaooGame.GameObjects.Ball;
 import PaooGame.GameObjects.Basket;
 import PaooGame.GameObjects.Player;
 import PaooGame.GameWindow.GameWindow;
 import PaooGame.ImpulseEngine.*;
 import PaooGame.ImpulseEngine.Polygon;
+import PaooGame.Match.Match;
 import PaooGame.UserInterface.Menu;
 import PaooGame.UserInterface.Option;
 
+import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -33,7 +36,7 @@ public class Assets
     public static Ball ball;
     public static Menu menu;
     public static Menu levels;
-
+    public static DataBaseManager dataBaseManager;
     public static  final int hitBoxBall = 75;
 
     public static final int hitBoxXPlayer = 170;
@@ -41,7 +44,7 @@ public class Assets
 
     public static final int hitBoxXBasket = 150;
     public static final int hitBoxYBasket = 30;
-
+    public static Match match;
     public static void Init()
     {
         SpriteSheet players = new SpriteSheet(ImageLoader.LoadImage("/textures/Players.png"));
@@ -80,6 +83,9 @@ public class Assets
         bBall.invInertia = 0.5f;
         bBall.restitution =10f;
         bBall.mass = 10f;
+
+        dataBaseManager = new DataBaseManager("player.db");
+        dataBaseManager.createTable();
 
 
         menu = new Menu(GameWindow.GetWndWidth()/3, (int) (GameWindow.GetWndHeight()/5.5),150,menuBackground);
@@ -120,5 +126,20 @@ public class Assets
                 fans[i * fansPerRow + j] = new Fan(fanImage, x, y + 200); // Add the fan to the array
             }
         }
+
+
+        match = new Match();
+
+        match.setBasketRight(basketRight);
+        match.setBasketLeft(basketLeft);
+        match.setPlayerLeft(playerLeft);
+        match.setPlayerRight(playerRight);
+        match.setBall(ball);
+        match.setClock(clock);
+        match.setBackground(field1);
+        Match.setRunningAds(runningAds);
+        Match.setFans(fans);
+
+        match.saveMatch();
     }
 }
