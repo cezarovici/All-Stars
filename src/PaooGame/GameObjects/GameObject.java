@@ -1,63 +1,73 @@
 package PaooGame.GameObjects;
 
-import PaooGame.Game;
+import PaooGame.ImpulseEngine.Body;
+import PaooGame.ImpulseEngine.Shape;
+import PaooGame.UserInterface.Mouse;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public abstract class GameObject {
     protected final BufferedImage sprite;
-    public static ArrayList<GameObject> gameObjects = new ArrayList<>(); // array of game objects
-    protected int x , y;
+    public Shape shape;
+    public static ArrayList<GameObject> gameObjects = new ArrayList<>();
+    // array of game objects
 
-    protected GameObject(BufferedImage sprite,int x , int y){
+    protected GameObject(BufferedImage sprite,int x , int y,Shape.Type type){
+        this.shape = Shape.ShapeBuilder(type);
+        this.shape.setBody(new Body(shape,x,y));
+
+        // initialize the sprite
         this.sprite = sprite;
-        this.x = x;
-        this.y = y;
 
-        gameObjects.add(this); // save any instance of an object
+        // save any instance of an object
+        // in game objects list
+        gameObjects.add(this);
     }
     protected void Draw(Graphics graphics){
-        graphics.drawImage(sprite,x,y,null);
-    }
-
-    protected void moveY(int y){
-        this.y += y;
-    }
-
-    protected void moveX(int x){
-        this.x += x;
-    }
-
-    protected void move(int x, int y){
-        moveY(y);
-        moveX(x);
-    }
-    public Helpers.Vector2 getCenter(){
-        return new Helpers.Vector2(x+sprite.getWidth()/2,y+ sprite.getHeight()/2);
-    }
-    protected int getX(){
-        return x;
-    }
-    protected int getY(){
-        return y;
-    }
-
-    protected void setY(int y){
-        this.y = y;
-    }
-    protected void setX(int x){
-        this.x = x;
+        graphics.drawImage(sprite, (int) shape.body.position.x, (int) shape.body.position.y,null);
     }
 
     protected abstract boolean collides(GameObject object);
 
-
     public ArrayList<GameObject> getGameObjects(){
         return gameObjects;
     }
-     protected void update(){
 
+    public abstract void move(int x, int y);
+
+    public abstract Helpers.Vector2 getCenter();
+
+    public  void setY(int y){
+        shape.body.position.y = (float)y;
+    }
+
+    public void setX(int x){
+        shape.body.position.x = (float)x;
+    }
+
+    public void update(){
+        setY((int) shape.body.getPosition().y);
+        setX((int)shape.body.getPosition().x);
+    }
+
+    public void moveByMouse(Mouse mouse){
+        if (mouse.mouseUp[MouseEvent.BUTTON1]){
+            setY(mouse.mouseY);
+            setX(mouse.mouseX);
+        }
+    }
+
+     public int getX(){
+        return (int) shape.body.position.getX();
      }
+
+     public int getY(){
+        return (int) shape.body.position.getY();
+    }
+    public void print(){
+        shape.body.print();
+    }
 }

@@ -21,18 +21,38 @@
 
 package PaooGame.ImpulseEngine;
 
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
+
 public class Circle extends Shape
 {
+	public Circle(){
+		super();
 
-	public Circle( float r )
+	}
+	public Circle( int x ,int y,float r )
 	{
+		super(x,y);
 		radius = r;
+	}
+
+	public void Draw(Graphics2D g2d) {
+		Body b = this.body;
+		Circle c = this;
+
+		float rx = (float) StrictMath.cos(body.getOrient()) * radius;
+		float ry = (float) StrictMath.sin(body.getOrient()) * radius;
+
+		g2d.setColor(Color.red);
+		g2d.draw(new Ellipse2D.Float(b.position.x - c.radius, b.position.y - c.radius, c.radius * 2, c.radius * 2));
+		g2d.draw(new Line2D.Float(b.position.x, b.position.y, b.position.x + rx, b.position.y + ry));
 	}
 
 	@Override
 	public Shape clone()
 	{
-		return new Circle( radius );
+		return new Circle((int) body.position.x, (int) body.position.y,radius);
 	}
 
 	@Override

@@ -4,17 +4,16 @@ import PaooGame.GameObjects.Ball;
 import PaooGame.GameObjects.Basket;
 import PaooGame.GameObjects.Player;
 import PaooGame.GameWindow.GameWindow;
+import PaooGame.ImpulseEngine.*;
+import PaooGame.ImpulseEngine.Polygon;
+import PaooGame.UserInterface.Menu;
+import PaooGame.UserInterface.Option;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-
-/*! \class public class Assets
-    \brief Clasa incarca fiecare element grafic necesar jocului.
-
-    Game assets include tot ce este folosit intr-un joc: imagini, sunete, harti etc.
- */
 public class Assets
 {
         /// Referinte catre elementele grafice (dale) utilizate in joc.
@@ -23,21 +22,17 @@ public class Assets
 
     private static final int[] PLAYER1_KEYS = {KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D};
     private static final int[] PLAYER2_KEYS = {KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT};
+    public static Background menuBackground;
     public static Basket basketLeft;
     public static Basket basketRight;
     public static Background field1;
     public static ArrayList<RunningAd> runningAds = new ArrayList<>();;
     public static Fan []fans = new Fan[100];
     public static Clock clock;
+    public static ImpulseScene impulseScene;
     public static Ball ball;
-
-    /*! \fn public static void Init()
-        \brief Functia initializaza referintele catre elementele grafice utilizate.
-
-        Aceasta functie poate fi rescrisa astfel incat elementele grafice incarcate/utilizate
-        sa fie parametrizate. Din acest motiv referintele nu sunt finale.
-     */
-
+    public static Menu menu;
+    public static Menu levels;
 
     public static  final int hitBoxBall = 75;
 
@@ -49,13 +44,13 @@ public class Assets
 
     public static void Init()
     {
-        /// Se creazcca temporar un obiect SpriteSheet initializat prin intermediul clasei ImageLoader
         SpriteSheet players = new SpriteSheet(ImageLoader.LoadImage("/textures/Players.png"));
         BufferedImage fanImage = ImageLoader.LoadImage("/textures/Fan.png");
 
         field1 = new Background(ImageLoader.LoadImage("/textures/NewYorkKnicksField.jpg"));
+        menuBackground = new Background(ImageLoader.LoadImage("/textures/MenuBackground.png"));
 
-        ball = Ball.getInstance(ImageLoader.LoadImage("/textures/ball.png"),GameWindow.GetWndWidth()/2,GameWindow.GetWndHeight()/2,hitBoxBall);
+        ball = Ball.getInstance(ImageLoader.LoadImage("/textures/ball.png"),GameWindow.GetWndWidth()/2-1000,GameWindow.GetWndHeight()/2,hitBoxBall);
 
         playerLeft = new Player(players.crop(0,0),0,1080/2,hitBoxXPlayer,hitBoxYPlayer);
         playerLeft.setKeys(PLAYER1_KEYS);
@@ -67,6 +62,40 @@ public class Assets
 
         basketLeft = new Basket(ImageLoader.LoadImage("/textures/basketSpriteLeft.png"),0,1080-450-234,hitBoxXBasket,hitBoxYBasket);            // todo make this constants
         basketRight = new Basket(ImageLoader.LoadImage("/textures/basketSpriteRight.png"),1920-163,1080-450-234,hitBoxXBasket,hitBoxYBasket);   // todo make this constants
+
+        impulseScene = new ImpulseScene(ImpulseMath.DT,10);
+
+        Body p1 = impulseScene.add(playerLeft.shape,0,1080/2);
+        Body p2 = impulseScene.add(playerRight.shape,1920,1080/2);
+
+        p1.mass = 10f;
+        p2.mass = 5f;
+
+        Body poly = impulseScene.add( new Polygon( (float)240,(float)GameWindow.GetWndHeight()/2+200,500.0f, 10.0f ), 240, GameWindow.GetWndHeight()/2+200 );
+        poly.setStatic();
+        poly.setOrient( 0 );
+
+        Body bBall  = impulseScene.add(ball.shape,GameWindow.GetWndWidth()/2,GameWindow.GetWndHeight()/2);
+        bBall.setOrient( ImpulseMath.random( -ImpulseMath.PI, ImpulseMath.PI ) );
+        bBall.invInertia = 0.5f;
+        bBall.restitution =10f;
+        bBall.mass = 10f;
+
+
+        menu = new Menu(GameWindow.GetWndWidth()/3, (int) (GameWindow.GetWndHeight()/5.5),150,menuBackground);
+        menu.addOption(new Option("Start Game", Color.MAGENTA,Font.getFont(Font.SANS_SERIF),500,100));
+        menu.addOption(new Option("Load Game", Color.MAGENTA,Font.getFont(Font.SANS_SERIF),500,100));
+        menu.addOption(new Option("Save Game", Color.MAGENTA,Font.getFont(Font.SANS_SERIF),500,100));
+        menu.addOption(new Option("Levels", Color.MAGENTA,Font.getFont(Font.SANS_SERIF),500,100));
+        menu.addOption(new Option("EXIT", Color.MAGENTA,Font.getFont(Font.SANS_SERIF),500,100));
+
+        levels = new Menu(GameWindow.GetWndWidth()/3, (int) (GameWindow.GetWndHeight()/5.5),150,menuBackground);
+        levels.addOption(new Option("Default Game", Color.MAGENTA,Font.getFont(Font.SANS_SERIF),500,200));
+        levels.addOption(new Option("Level 1", Color.MAGENTA,Font.getFont(Font.SANS_SERIF),500,200));
+        levels.addOption(new Option("Level 2", Color.MAGENTA,Font.getFont(Font.SANS_SERIF),500,200));
+        levels.addOption(new Option("Level 3", Color.MAGENTA,Font.getFont(Font.SANS_SERIF),500,200));
+        levels.addOption(new Option("CUSTOM", Color.MAGENTA,Font.getFont(Font.SANS_SERIF),500,200));
+
 
         runningAds.add(wizardGame2Add);
         runningAds.add(yourAddHere);

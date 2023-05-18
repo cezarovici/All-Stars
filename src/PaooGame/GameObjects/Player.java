@@ -1,9 +1,14 @@
 package PaooGame.GameObjects;
 
 import PaooGame.GameWindow.GameWindow;
+import PaooGame.ImpulseEngine.Polygon;
+import PaooGame.ImpulseEngine.Shape;
+import PaooGame.ImpulseEngine.Vec2;
 import PaooGame.UserInterface.Keyboard;
+import PaooGame.UserInterface.Mouse;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 public class Player extends GameObject {
@@ -17,12 +22,22 @@ public class Player extends GameObject {
     public Helpers.Bounds bounds;
     private PlayerControlTemplate playerControls;
     public Player(BufferedImage sprite, int x, int y,int hitBoxX,int hitBoxY) {
-        super(sprite, x, y);
+        super(sprite, x, y, Shape.Type.Poly);
         int tempX = x + sprite.getWidth() / 2 -  hitBoxX / 2;
         int tempY  = y + sprite.getHeight() /2 - hitBoxY/ 2;
 
+
         hitBox = new Rectangle(tempX,tempY,hitBoxX,hitBoxY);
         bounds = new Helpers.Bounds(tempX,tempY,tempX+hitBoxX,tempY+hitBoxY);
+
+
+        Vec2 v1 = new Vec2(hitBox.x,hitBox.y);
+        Vec2 v2 = new Vec2(hitBox.x+hitBoxX,hitBox.y);
+        Vec2 v3 = new Vec2(hitBox.x+hitBoxX,hitBox.y+hitBoxY);
+        Vec2 v4 = new Vec2(hitBox.x,hitBox.y+hitBoxY);
+
+        ((Polygon) shape).set(v1,v2,v3,v4);
+        ((Polygon) shape).print();
     }
 
     public void setKeys(int []keys){
@@ -37,6 +52,9 @@ public class Player extends GameObject {
         super.Draw(graphics);
     }
 
+    public boolean isJumping(){
+        return isJumping;
+    }
     @Override
     public void move(int x, int y) {
         // Get the current position of the player
@@ -94,6 +112,7 @@ public class Player extends GameObject {
     }
     @Override
     public void update() {
+     // super.update();
 
         int deltaY = 0, deltaX = 0;
 
@@ -155,11 +174,9 @@ public class Player extends GameObject {
             Rectangle rect1 = this.hitBox;
             Rectangle rect2 = ((Player) other).hitBox;
 
-            System.out.println(rect1.intersects(rect2));
             return rect1.intersects(rect2);
         }
 
         return false;
     }
-
 }

@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 public class Background
 {
 
-    private final BufferedImage       background;
+    public final BufferedImage       background;
     private static final int    backgroundWidth   = 1920;
     private static final int    backgroundHeight  = 450;
 
