@@ -1,83 +1,77 @@
 package PaooGame.DataBase;
 
+import java.io.*;
 import java.sql.*;
 
 public class DataBaseManager {
-        private Connection conn;
 
-        public DataBaseManager(String databasePath) {
-            try {
-                // Register the SQLite JDBC driver
-                Class.forName("org.sqlite.JDBC");
+    private Connection connection;
 
-                // Create a connection to the database
-                conn = DriverManager.getConnection("jdbc:sqlite:" + databasePath);
-            } catch (ClassNotFoundException | SQLException e) {
-                e.printStackTrace();
-            }
+    public DataBaseManager(String databasePath) {
+        try {
+            // Establish the database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:" + databasePath);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
-        // Create a table in the database
-        public void createTable() {
-            String sql = "CREATE TABLE IF NOT EXISTS players (id INTEGER PRIMARY KEY, name TEXT, score INTEGER)";
-            try {
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                stmt.execute();
-                stmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    }
+    public void createTable(String tableName, String columnsDefinition) {
+        try (Statement statement = connection.createStatement()) {
+            // Execute the query to create the table
+            String query = "CREATE TABLE IF NOT EXISTS " + tableName + " (" + columnsDefinition + ")";
+            statement.execute(query);
+            System.out.println("Table created successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+    }
+    public void saveData(String tableName, String columnName, Object data) {
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+             ObjectOutputStream oos = new ObjectOutputStream(baos);
+             PreparedStatement statement = connection.prepareStatement(
+                     "INSERT INTO " + tableName + " (" + columnName + ") VALUES (?)")) {
 
-        // Insert a new player into the database
-        public void insertPlayer(String name, int score) {
-            String sql = "INSERT INTO players (name, score) VALUES (?, ?)";
-            try {
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                stmt.setString(1, name);
-                stmt.setInt(2, score);
-                stmt.executeUpdate();
-                stmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            oos.writeObject(data);
+            byte[] dataBytes = baos.toByteArray();
+            ByteArrayInputStream bais = new ByteArrayInputStream(dataBytes);
+
+            statement.setBinaryStream(1, bais, dataBytes.length);
+            statement.executeUpdate();
+            System.out.println("Data saved successfully.");
+
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
         }
+    }
 
-        // Update a player's score in the database
-        public void updatePlayerScore(String name, int newScore) {
-            String sql = "UPDATE players SET score = ? WHERE name = ?";
-            try {
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                stmt.setInt(1, newScore);
-                stmt.setString(2, name);
-                stmt.executeUpdate();
-                stmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+    public Object loadData(String tableName, String columnName, int id) {
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT " + columnName + " FROM " + tableName + " WHERE id = ?")) {
+            statement.setInt(1, id);
 
-        // Delete a player from the database
-        public void deletePlayer(String name) {
-            String sql = "DELETE FROM players WHERE name = ?";
-            try {
-                PreparedStatement stmt = conn.prepareStatement(sql);
-                stmt.setString(1, name);
-                stmt.executeUpdate();
-                stmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        // Close the database connection
-        public void closeConnection() {
-            try {
-                if (conn != null) {
-                    conn.close();
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    InputStream is = resultSet.getBinaryStream(columnName);
+                    ObjectInputStream ois = new ObjectInputStream(is);
+                    Object data = ois.readObject();
+                    ois.close();
+                    return data;
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
+        } catch (IOException | ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
         }
+
+        return null;
+    }
+
+    public void closeConnection() {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

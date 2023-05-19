@@ -24,6 +24,28 @@ public class Match {
 
     private Connection connection;
 
+    public Player getPlayerById(int playerId) {
+        String query = "SELECT * FROM players WHERE id = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, playerId);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                // Retrieve the player properties from the result set
+                String name = resultSet.getString("player_name");
+                // ... Retrieve other properties as needed
+
+                // Create and return the player object
+                return new Player(name);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null; // Return null if the player with the specified ID is not found or an error occurs
+    }
+
     public Match() {
         // Initialize the connection to the SQLite database
         String url = "jdbc:sqlite:match.db"; // Replace with your database path

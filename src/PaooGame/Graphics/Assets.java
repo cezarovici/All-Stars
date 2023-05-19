@@ -85,7 +85,6 @@ public class Assets
         bBall.mass = 10f;
 
         dataBaseManager = new DataBaseManager("player.db");
-        dataBaseManager.createTable();
 
 
         menu = new Menu(GameWindow.GetWndWidth()/3, (int) (GameWindow.GetWndHeight()/5.5),150,menuBackground);
