@@ -5,7 +5,7 @@ import java.sql.*;
 
 public class DataBaseManager {
 
-    private Connection connection;
+    protected Connection connection;
 
     public DataBaseManager(String databasePath) {
         try {
@@ -15,6 +15,7 @@ public class DataBaseManager {
             e.printStackTrace();
         }
     }
+
     public void createTable(String tableName, String columnsDefinition) {
         try (Statement statement = connection.createStatement()) {
             // Execute the query to create the table

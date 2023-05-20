@@ -2,6 +2,7 @@ package PaooGame.GameObjects;
 
 import PaooGame.ImpulseEngine.Body;
 import PaooGame.ImpulseEngine.Shape;
+import PaooGame.ImpulseEngine.Vec2;
 import PaooGame.UserInterface.Mouse;
 
 import java.awt.*;
@@ -69,5 +70,9 @@ public abstract class GameObject {
     }
     public void print(){
         shape.body.print();
+    }
+
+    public Vec2 getPosition() {
+        return shape.body.getPosition();
     }
 }

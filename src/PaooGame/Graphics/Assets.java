@@ -11,7 +11,7 @@ import PaooGame.Match.Match;
 import PaooGame.UserInterface.Menu;
 import PaooGame.UserInterface.Option;
 
-import javax.xml.crypto.Data;
+import java.util.List;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -31,12 +31,15 @@ public class Assets
     public static Background field1;
     public static ArrayList<RunningAd> runningAds = new ArrayList<>();;
     public static Fan []fans = new Fan[100];
+    public  static List<Player> arrayPlayers;
     public static Clock clock;
     public static ImpulseScene impulseScene;
     public static Ball ball;
     public static Menu menu;
     public static Menu levels;
     public static DataBaseManager dataBaseManager;
+
+    public static Vec2 playerStart = new Vec2(0,1080/2);
     public static  final int hitBoxBall = 75;
 
     public static final int hitBoxXPlayer = 170;
@@ -55,9 +58,16 @@ public class Assets
 
         ball = Ball.getInstance(ImageLoader.LoadImage("/textures/ball.png"),GameWindow.GetWndWidth()/2-1000,GameWindow.GetWndHeight()/2,hitBoxBall);
 
-        playerLeft = new Player(players.crop(0,0),0,1080/2,hitBoxXPlayer,hitBoxYPlayer);
+        for (int column = 0 ; column < 3 ; column++){
+            for(int line = 0 ; line < 3; line++){
+                arrayPlayers.add(new Player(players.crop(column,line), (int) playerStart.x, (int) playerStart.y,hitBoxXPlayer,hitBoxYPlayer));
+            }
+        }
+
+
+        playerLeft = arrayPlayers.get(0);
         playerLeft.setKeys(PLAYER1_KEYS);
-        playerRight = new Player(players.crop(1,0),1920,1080/2,hitBoxXPlayer,hitBoxYPlayer);
+        playerRight = arrayPlayers.get(1);
         playerRight.setKeys(PLAYER2_KEYS);
 
         RunningAd wizardGame2Add = new RunningAd("Play WizardGame2 FREE", GameWindow.GetWndWidth() / 8, 500, 5);
@@ -139,6 +149,6 @@ public class Assets
         Match.setRunningAds(runningAds);
         Match.setFans(fans);
 
-        match.saveMatch();
+        //match.saveMatch();
     }
 }
