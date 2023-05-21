@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public abstract class GameObject {
     protected final BufferedImage sprite;
     public Shape shape;
+    protected int id;
     public static ArrayList<GameObject> gameObjects = new ArrayList<>();
     // array of game objects
 

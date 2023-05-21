@@ -60,9 +60,26 @@ public class Assets
 
         for (int column = 0 ; column < 3 ; column++){
             for(int line = 0 ; line < 3; line++){
-                arrayPlayers.add(new Player(players.crop(column,line), (int) playerStart.x, (int) playerStart.y,hitBoxXPlayer,hitBoxYPlayer));
+                arrayPlayers.add(new Player(column+line,players.crop(column,line), (int) playerStart.x, (int) playerStart.y,hitBoxXPlayer,hitBoxYPlayer));
             }
         }
+
+        arrayPlayers.get(0).setName("Cezar");
+        arrayPlayers.get(1).setName("Simi");
+        arrayPlayers.get(2).setName("Dumitru");
+        arrayPlayers.get(3).setName("LeBron");
+        arrayPlayers.get(4).setName("Curry");
+        arrayPlayers.get(5).setName("Vieru");
+        arrayPlayers.get(6).setName("Florin");
+        arrayPlayers.get(7).setName("Sebi");
+        arrayPlayers.get(8).setName("Fanaragiu");
+        arrayPlayers.get(9).setName("Cristi");
+        arrayPlayers.get(10).setName("Radu");
+        arrayPlayers.get(11).setName("Misu");
+        arrayPlayers.get(12).setName("Silviu");
+        arrayPlayers.get(13).setName("Erich");
+        arrayPlayers.get(14).setName("Spiri");
+        arrayPlayers.get(15).setName("Panciuc");
 
 
         playerLeft = arrayPlayers.get(0);
@@ -94,7 +111,7 @@ public class Assets
         bBall.restitution =10f;
         bBall.mass = 10f;
 
-        dataBaseManager = new DataBaseManager("player.db");
+        //dataBaseManager = new DataBaseManager("player.db");
 
 
         menu = new Menu(GameWindow.GetWndWidth()/3, (int) (GameWindow.GetWndHeight()/5.5),150,menuBackground);

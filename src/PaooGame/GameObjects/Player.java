@@ -18,10 +18,11 @@ public class Player extends GameObject {
     private double yVelocity = 0;
     private boolean isJumping = false;
     public Rectangle hitBox;
+    public String name;
 
     public Helpers.Bounds bounds;
     private PlayerControlTemplate playerControls;
-    public Player(BufferedImage sprite, int x, int y,int hitBoxX,int hitBoxY) {
+    public Player(int id,BufferedImage sprite, int x, int y,int hitBoxX,int hitBoxY) {
         super(sprite, x, y, Shape.Type.Poly);
         int tempX = x + sprite.getWidth() / 2 -  hitBoxX / 2;
         int tempY  = y + sprite.getHeight() /2 - hitBoxY/ 2;
@@ -30,6 +31,7 @@ public class Player extends GameObject {
         hitBox = new Rectangle(tempX,tempY,hitBoxX,hitBoxY);
         bounds = new Helpers.Bounds(tempX,tempY,tempX+hitBoxX,tempY+hitBoxY);
 
+        this.id = id;
 
         Vec2 v1 = new Vec2(hitBox.x,hitBox.y);
         Vec2 v2 = new Vec2(hitBox.x+hitBoxX,hitBox.y);
@@ -38,6 +40,13 @@ public class Player extends GameObject {
 
         ((Polygon) shape).set(v1,v2,v3,v4);
         ((Polygon) shape).print();
+    }
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setKeys(int []keys){

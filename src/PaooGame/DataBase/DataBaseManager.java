@@ -3,7 +3,7 @@ package PaooGame.DataBase;
 import java.io.*;
 import java.sql.*;
 
-public class DataBaseManager {
+public abstract class DataBaseManager {
 
     protected Connection connection;
 
