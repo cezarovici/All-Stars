@@ -177,6 +177,7 @@ public class Player extends GameObject {
         bounds.update(hitBox);
         move(deltaX, deltaY);
     }
+
     @Override
     protected boolean collides(GameObject other) {
         if (other instanceof Player){

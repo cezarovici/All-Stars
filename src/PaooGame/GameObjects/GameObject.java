@@ -62,7 +62,11 @@ public abstract class GameObject {
         }
     }
 
-     public int getX(){
+    public int getId() {
+        return id;
+    }
+
+    public int getX(){
         return (int) shape.body.position.getX();
      }
 

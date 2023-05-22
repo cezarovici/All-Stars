@@ -1,5 +1,6 @@
 package PaooGame.Match;
 
+import PaooGame.DataBase.DBMatches;
 import PaooGame.GameObjects.Ball;
 import PaooGame.GameObjects.Basket;
 import PaooGame.GameObjects.Player;
@@ -92,5 +93,22 @@ public class Match {
 
     public static void setFans(Fan[] fans) {
         Match.fans = fans;
+    }
+
+
+    public Match  setMatch(Basket basketRight, Basket basketLeft, Player player1, Player player2, Ball ball, Clock clock, Background background, ArrayList<RunningAd> runningAds, Fan[] fans, DBMatches dbMatches) {
+        this.setBasketRight(basketRight);
+        this.setBasketLeft(basketLeft);
+        this.setPlayerLeft(player1);
+        this.setPlayerRight(player2);
+        this.setBall(ball);
+        this.setClock(clock);
+        this.setBackground(background);
+        Match.setRunningAds(runningAds);
+        Match.setFans(fans);
+
+        dbMatches.saveMatch("match", this);
+
+        return this;
     }
 }

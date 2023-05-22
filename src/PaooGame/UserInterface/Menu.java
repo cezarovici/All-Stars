@@ -21,6 +21,7 @@ public class Menu {
     public boolean stop;
     public boolean levels;
     private boolean update;
+    public  boolean save;
 
     public Menu(int x, int y, int spacing, Background background) {
         options = new ArrayList<>();
@@ -62,6 +63,7 @@ public class Menu {
                 case "Start Game" -> start = true;
                 case "EXIT" -> stop = true;
                 case "Levels" -> levels = true;
+                case "Save Game" -> save = true;
             }
         }
         else{
@@ -136,4 +138,5 @@ public class Menu {
     public boolean Levels(){
         return levels;
     }
+    public boolean Save(){return save;}
 }

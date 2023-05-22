@@ -1,5 +1,6 @@
 package PaooGame;
 
+import PaooGame.DataBase.DBMatches;
 import PaooGame.GameObjects.Ball;
 import PaooGame.GameObjects.Basket;
 import PaooGame.GameObjects.Player;
@@ -8,6 +9,7 @@ import PaooGame.Graphics.*;
 import PaooGame.ImpulseEngine.*;
 import PaooGame.ImpulseEngine.Polygon;
 
+import PaooGame.Match.Match;
 import PaooGame.UserInterface.Keyboard;
 import PaooGame.UserInterface.Menu;
 
@@ -60,7 +62,9 @@ public class Game implements Runnable
     Clock clock;
     Ball ball;
     Menu menu;
+    DBMatches dbMatches = new DBMatches("data_base.db");
     Menu levels;
+    Match match;
     ImpulseScene impulseScene;
     public Game(String title, int width, int height)
     {
@@ -92,6 +96,7 @@ public class Game implements Runnable
         player1 = Assets.playerLeft;
         player2 = Assets.playerRight;
 
+        match = Assets.match;
 
         fans = Assets.fans;
 
@@ -221,6 +226,12 @@ public class Game implements Runnable
                 menu.start = false;
             }
 
+            if (menu.Save()){
+               match.setMatch(basketRight, basketLeft, player1, player2, ball, clock, background, runningAds, fans, dbMatches);
+               menu.save = false;
+            }
+
+
             if(menu.Levels()){
                 currentState = GameState.MENU_Levels;
                 levels.start = false;
@@ -253,6 +264,7 @@ public class Game implements Runnable
             }
         }
     }
+
 
     /*! \fn private void Draw()
         \brief Deseneaza elementele grafice in fereastra coresponzator starilor actualizate ale elementelor.
@@ -316,7 +328,7 @@ public class Game implements Runnable
 
           ball.Draw(g);
 
-          impulseScene.Draw((Graphics2D) g);
+          //impulseScene.Draw((Graphics2D) g);
       }
 
         bs.show();

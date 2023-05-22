@@ -14,6 +14,8 @@ public abstract class DataBaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        System.out.println("Connected successfully");
     }
 
     public void createTable(String tableName, String columnsDefinition) {
@@ -23,24 +25,6 @@ public abstract class DataBaseManager {
             statement.execute(query);
             System.out.println("Table created successfully.");
         } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    public void saveData(String tableName, String columnName, Object data) {
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-             ObjectOutputStream oos = new ObjectOutputStream(baos);
-             PreparedStatement statement = connection.prepareStatement(
-                     "INSERT INTO " + tableName + " (" + columnName + ") VALUES (?)")) {
-
-            oos.writeObject(data);
-            byte[] dataBytes = baos.toByteArray();
-            ByteArrayInputStream bais = new ByteArrayInputStream(dataBytes);
-
-            statement.setBinaryStream(1, bais, dataBytes.length);
-            statement.executeUpdate();
-            System.out.println("Data saved successfully.");
-
-        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -75,4 +59,6 @@ public abstract class DataBaseManager {
             e.printStackTrace();
         }
     }
+
+    public abstract void  createTable();
 }

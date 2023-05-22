@@ -27,6 +27,13 @@ public class Clock extends Rectangle {
         timer.scheduleAtFixedRate(timerTask,1000,1000);
     }
 
+    public int getTimeLeft() {
+        return timeLeft;
+    }
+
+    public void setTimeLeft(int timeLeft) {
+        this.timeLeft = timeLeft;
+    }
 
     public void draw(Graphics graphics) {
         graphics.setColor(Color.orange);

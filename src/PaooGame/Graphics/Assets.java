@@ -1,6 +1,9 @@
 package PaooGame.Graphics;
 
+import PaooGame.DataBase.DBMatches;
+import PaooGame.DataBase.DBPlayer;
 import PaooGame.DataBase.DataBaseManager;
+import PaooGame.Game;
 import PaooGame.GameObjects.Ball;
 import PaooGame.GameObjects.Basket;
 import PaooGame.GameObjects.Player;
@@ -37,8 +40,8 @@ public class Assets
     public static Ball ball;
     public static Menu menu;
     public static Menu levels;
-    public static DataBaseManager dataBaseManager;
-
+    public static DBPlayer dbPlayers;
+    public static DBMatches dbMatches;
     public static Vec2 playerStart = new Vec2(0,1080/2);
     public static  final int hitBoxBall = 75;
 
@@ -48,6 +51,7 @@ public class Assets
     public static final int hitBoxXBasket = 150;
     public static final int hitBoxYBasket = 30;
     public static Match match;
+    public static String dataBasePath = "data_base.db";
     public static void Init()
     {
         SpriteSheet players = new SpriteSheet(ImageLoader.LoadImage("/textures/Players.png"));
@@ -58,8 +62,10 @@ public class Assets
 
         ball = Ball.getInstance(ImageLoader.LoadImage("/textures/ball.png"),GameWindow.GetWndWidth()/2-1000,GameWindow.GetWndHeight()/2,hitBoxBall);
 
-        for (int column = 0 ; column < 3 ; column++){
-            for(int line = 0 ; line < 3; line++){
+        arrayPlayers = new ArrayList<Player>();
+
+        for (int column = 0 ; column < 4 ; column++){
+            for(int line = 0 ; line < 4; line++){
                 arrayPlayers.add(new Player(column+line,players.crop(column,line), (int) playerStart.x, (int) playerStart.y,hitBoxXPlayer,hitBoxYPlayer));
             }
         }
@@ -81,10 +87,22 @@ public class Assets
         arrayPlayers.get(14).setName("Spiri");
         arrayPlayers.get(15).setName("Panciuc");
 
-
         playerLeft = arrayPlayers.get(0);
-        playerLeft.setKeys(PLAYER1_KEYS);
         playerRight = arrayPlayers.get(1);
+
+        dbPlayers = new DBPlayer(dataBasePath);
+        //dbPlayers.createTable();
+       // dbPlayers.savePlayers("player","name,x_position,y_position",arrayPlayers);
+
+        dbMatches = new DBMatches(dataBasePath);
+        dbMatches.createTable();
+
+        match = new Match();
+
+        match.setMatch(basketRight, basketLeft, playerLeft, playerRight, ball, clock, field1, runningAds, fans, dbMatches);
+
+
+        playerLeft.setKeys(PLAYER1_KEYS);
         playerRight.setKeys(PLAYER2_KEYS);
 
         RunningAd wizardGame2Add = new RunningAd("Play WizardGame2 FREE", GameWindow.GetWndWidth() / 8, 500, 5);
@@ -156,15 +174,6 @@ public class Assets
 
         match = new Match();
 
-        match.setBasketRight(basketRight);
-        match.setBasketLeft(basketLeft);
-        match.setPlayerLeft(playerLeft);
-        match.setPlayerRight(playerRight);
-        match.setBall(ball);
-        match.setClock(clock);
-        match.setBackground(field1);
-        Match.setRunningAds(runningAds);
-        Match.setFans(fans);
 
         //match.saveMatch();
     }
