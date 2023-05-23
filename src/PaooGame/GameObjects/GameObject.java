@@ -58,8 +58,8 @@ public abstract class GameObject {
     }
 
     public void update(){
-        setY((int) shape.body.getPosition().y);
-        setX((int)shape.body.getPosition().x);
+        //setY((int) shape.body.getPosition().y);
+        //setX((int)shape.body.getPosition().x);
     }
 
 

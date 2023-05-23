@@ -42,7 +42,7 @@ public class Assets
     public static Menu levels;
     public static DBPlayer dbPlayers;
     public static DBMatches dbMatches;
-    public static Vec2 player2Start = new Vec2(1800,1080/2);
+    public static Vec2 player2Start = new Vec2(1920,1080/2);
     public static Vec2 player1Start = new Vec2(0,1080/2);
     public static  final int hitBoxBall = 75;
 
@@ -115,21 +115,9 @@ public class Assets
 
         impulseScene = new ImpulseScene(ImpulseMath.DT,10);
 
-        Body p1 = impulseScene.add(playerLeft.shape,0,1080/2);
-        Body p2 = impulseScene.add(playerRight.shape,1920,1080/2);
 
-        p1.mass = 10f;
-        p2.mass = 5f;
-
-        Body poly = impulseScene.add( new Polygon( (float)240,(float)GameWindow.GetWndHeight()/2+200,500.0f, 10.0f ), 240, GameWindow.GetWndHeight()/2+200 );
-        poly.setStatic();
-        poly.setOrient( 0 );
 
         Body bBall  = impulseScene.add(ball.shape,GameWindow.GetWndWidth()/2,GameWindow.GetWndHeight()/2);
-        bBall.setOrient( ImpulseMath.random( -ImpulseMath.PI, ImpulseMath.PI ) );
-        bBall.invInertia = 0.5f;
-        bBall.restitution =10f;
-        bBall.mass = 10f;
 
         //dataBaseManager = new DataBaseManager("player.db");
 
@@ -186,6 +174,7 @@ public class Assets
         match.setMatch(basketRight, basketLeft, playerLeft, playerRight, ball, clock, field1, runningAdsL1, nykFanImage, dbMatches);
 
 
+
         playerLEFTL1 = new Player(2,(int)player1Start.x,(int)player1Start.y,hitBoxXPlayer,hitBoxYPlayer);
         playerRightL1 = new Player(3,(int)player2Start.x,(int)player2Start.y,hitBoxXPlayer,hitBoxYPlayer);
 
@@ -194,6 +183,18 @@ public class Assets
 
         playerLEFTL3 = new Player(6,(int)player1Start.x,(int)player1Start.y,hitBoxXPlayer,hitBoxYPlayer);
         playerRightL3 = new Player(7,(int)player2Start.x,(int)player2Start.y,hitBoxXPlayer,hitBoxYPlayer);
+
+        impulseScene.add(playerLeft.shape,0,1080/2);
+        impulseScene.add(playerRight.shape,1920,1080/2);
+
+        impulseScene.add(playerLEFTL1.shape,0,1080/2);
+        impulseScene.add(playerRightL1.shape,1920,1080/2);
+
+        impulseScene.add(playerLEFTL2.shape,0,1080/2);
+        impulseScene.add(playerRightL2.shape,1920,1080/2);
+
+        impulseScene.add(playerLEFTL3.shape,0,1080/2);
+        impulseScene.add(playerRightL3.shape,1920,1080/2);
 
         playerLEFTL1.setKeys(PLAYER1_KEYS);
         playerLEFTL2.setKeys(PLAYER1_KEYS);

@@ -45,7 +45,7 @@ public class Player extends GameObject {
         Vec2 v4 = new Vec2(hitBox.x,hitBox.y+hitBoxY);
 
         ((Polygon) shape).set(v1,v2,v3,v4);
-        ((Polygon) shape).print();
+        //((Polygon) shape).print();
     }
 
     public void setName(String name){

@@ -43,9 +43,18 @@ public class Ball extends GameObject {
         super.Draw(graphics);
     }
 
-    @Override
     protected boolean collides(GameObject object) {
-        return false;
+        // Calculate the distance between the center of the ball and the player's hitbox
+        if  (!(object instanceof Player player)) {
+            return false;
+        }
+
+        double dx = getX() - player.hitBox.x;
+        double dy = getY() - player.hitBox.y;
+        double distance = Math.sqrt(dx * dx + dy * dy);
+
+        // Check if the distance is less than the sum of the ball's radius and half of the player's width/height
+        return distance < radius + (Math.max(player.hitBox.width, player.hitBox.height) / 2.0);
     }
 
     @Override
@@ -54,7 +63,7 @@ public class Ball extends GameObject {
 
     @Override
     public void update() {
-        super.update();
+        //super.update();
         hitboxCircle.setFrame(getX()+sprite.getWidth()/2-radius,getY()+sprite.getHeight()/2-radius,radius*2,radius*2);
 
         if (isBouncing()) {
@@ -82,9 +91,11 @@ public class Ball extends GameObject {
                     vx = dx / dist * 5; // adjust horizontal velocity based on direction of collision
                     obj.move((int) (dx / dist * 10), (int) (dy / dist * 10));
 
-                    // update ball position
-                    setX(getX() + (int) vx);
-                    setY(getY() + (int) vy);
+//                    // update ball position
+//                    setX(getX() + (int) vx);
+//                    setY(getY() + (int) vy);
+
+                    setPosition(getX()+(int) vx,getY()+(int) vy);
 
                     // cap horizontal velocity at maximum value
                     vx = Math.min(Math.max(vx, -MAX_VX), MAX_VX);

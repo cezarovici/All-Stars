@@ -241,8 +241,8 @@ public class Game implements Runnable
             if (menu.isLoad()){
                 dbMatches.loadLastMatch(match,"match");
 
-                //match.setMatch(basketRight,basketLeft,match.playerLeft,match.playerLeft,match.getBall(),match.getClock(),match.background,match.runningAds,match.fanImage,dbMatches);
-                match.setTo(match);
+                match.setMatch(match.basketRight,match.basketLeft,match.playerLeft,match.playerLeft,match.getBall(),match.getClock(),match.background,match.runningAds,match.fanImage,dbMatches);
+                ///match.setTo(match);
                 if (match == null) {
                     throw new CustomNullPointerException();
                 }
@@ -262,36 +262,49 @@ public class Game implements Runnable
         }
         if (currentState == GameState.MENU_Levels){
             if (Keyboard.isKeyPressed(VK_ESCAPE)){
-                currentState = GameState.MENU_Start;
                 menu.start = true;
                 menu.levels = false;
                 levels.start = false;
                 menu.load = false;
+
+                currentState = GameState.MENU_Start;
             }
 
             if(levels.isLevel1()){
-                match.setTo(level1);
                 levels.level1 = false;
                 menu.level1 = false;
+                match.setTo(level1);
+                match.saveMatch();
+
                 currentState = GameState.PLAYING;
-                //match.saveMatch();
             }
 
             if(levels.isLevel2()){
-                match.setTo(level2);
                 levels.level2 = false;
                 menu.level2 = false;
+                match.setTo(level2);
+                match.saveMatch();
+
                 currentState = GameState.PLAYING;
-                //match.saveMatch();
             }
 
             if(levels.isLevel3()){
-                match.setTo(level3);
                 levels.level3 = false;
                 menu.level3= false;
+
+                match.setTo(level3);
+               match.saveMatch();
+
                 currentState = GameState.PLAYING;
-               // match.saveMatch();
             }
+        }
+        if(match.clock.isTimeUp())
+        {
+            currentState = GameState.MENU_Start;
+            g.setColor(Color.BLACK);
+            g.setFont(new Font(Font.SANS_SERIF,Font.ITALIC,30));
+            g.drawString("Times up",GameWindow.GetWndWidth()/2-100,100);
+            g.drawString("",GameWindow.GetWndWidth()/2-100,100);
         }
         else {
             match.playerLeft.update();
@@ -386,7 +399,7 @@ public class Game implements Runnable
 
           match.ball.Draw(g);
 
-          impulseScene.Draw((Graphics2D) g);
+          //impulseScene.Draw((Graphics2D) g);
       }
 
         bs.show();
