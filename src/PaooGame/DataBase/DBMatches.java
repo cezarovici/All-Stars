@@ -1,11 +1,17 @@
 package PaooGame.DataBase;
 
+import PaooGame.GameObjects.Ball;
 import PaooGame.GameObjects.Player;
+import PaooGame.GameWindow.GameWindow;
+import PaooGame.Graphics.Clock;
+import PaooGame.Graphics.ImageLoader;
 import PaooGame.ImpulseEngine.Vec2;
 import PaooGame.Match.Match;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DBMatches extends DataBaseManager{
@@ -13,7 +19,12 @@ public class DBMatches extends DataBaseManager{
         super(databasePath);
     }
 
-   @Override
+    public static  final int hitBoxBall = 75;
+
+    public static final int hitBoxXPlayer = 170;
+    public static final int hitBoxYPlayer = 200;
+
+    @Override
     public void  createTable(){
         super.createTable("match","\tid INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "\tplayerLeft_id INTEGER,\n" +
@@ -38,7 +49,7 @@ public class DBMatches extends DataBaseManager{
                         "playerRight_x,"+
                         "playerRight_y,"+
                         "ball_x,"+
-                        "ball_y"+
+                        "ball_y,"+
                         "time"+
                         ") VALUES (?,?,?,?,?,?,?,?,?)")) {
 
@@ -61,4 +72,37 @@ public class DBMatches extends DataBaseManager{
             e.printStackTrace();
         }
     }
+
+    public void loadLastMatch(Match match, String tableName) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tableName + " ORDER BY id DESC LIMIT 1");
+             ResultSet resultSet = statement.executeQuery()) {
+
+            if (resultSet.next()) {
+                int playerLeftId = resultSet.getInt("playerLeft_id");
+                int playerLeftX = resultSet.getInt("playerLeft_x");
+                int playerLeftY = resultSet.getInt("playerLeft_y");
+
+                int playerRightId = resultSet.getInt("playerRight_id");
+                int playerRightX = resultSet.getInt("playerRight_x");
+                int playerRightY = resultSet.getInt("playerRight_y");
+
+                int ballX = resultSet.getInt("ball_x");
+                int ballY = resultSet.getInt("ball_y");
+
+                int time = resultSet.getInt("time");
+
+
+                match.playerLeft.setPosition(playerLeftX,playerLeftY);
+                match.playerRight.setPosition(playerRightX,playerRightY);
+
+                match.ball.setPosition(ballX,ballY);
+
+                match.clock.setTimeLeft(time);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
+

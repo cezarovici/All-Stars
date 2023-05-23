@@ -5,7 +5,7 @@ import java.sql.*;
 
 public abstract class DataBaseManager {
 
-    protected Connection connection;
+    protected static Connection connection;
 
     public DataBaseManager(String databasePath) {
         try {

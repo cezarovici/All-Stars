@@ -1,5 +1,6 @@
 package PaooGame.GameObjects;
 
+import PaooGame.Game;
 import PaooGame.ImpulseEngine.Body;
 import PaooGame.ImpulseEngine.Shape;
 import PaooGame.ImpulseEngine.Vec2;
@@ -11,7 +12,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public abstract class GameObject {
-    protected final BufferedImage sprite;
+    protected BufferedImage sprite;
     public Shape shape;
     protected int id;
     public static ArrayList<GameObject> gameObjects = new ArrayList<>();
@@ -23,6 +24,15 @@ public abstract class GameObject {
 
         // initialize the sprite
         this.sprite = sprite;
+
+        // save any instance of an object
+        // in game objects list
+        gameObjects.add(this);
+    }
+
+    protected GameObject(int x , int y,Shape.Type type){
+        this.shape = Shape.ShapeBuilder(type);
+        this.shape.setBody(new Body(shape,x,y));
 
         // save any instance of an object
         // in game objects list
@@ -75,6 +85,11 @@ public abstract class GameObject {
     }
     public void print(){
         shape.body.print();
+    }
+
+    public void setPosition(int x, int y){
+        this.shape.body.position.x = x;
+        this.shape.body.position.y = y;
     }
 
     public Vec2 getPosition() {

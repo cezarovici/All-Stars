@@ -1,14 +1,14 @@
 package PaooGame.GameObjects;
 
 import PaooGame.GameWindow.GameWindow;
+import PaooGame.Graphics.ImageLoader;
+import PaooGame.Graphics.SpriteSheet;
 import PaooGame.ImpulseEngine.Polygon;
 import PaooGame.ImpulseEngine.Shape;
 import PaooGame.ImpulseEngine.Vec2;
 import PaooGame.UserInterface.Keyboard;
-import PaooGame.UserInterface.Mouse;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 public class Player extends GameObject {
@@ -19,14 +19,20 @@ public class Player extends GameObject {
     private boolean isJumping = false;
     public Rectangle hitBox;
     public String name;
+    final SpriteSheet players = new SpriteSheet(ImageLoader.LoadImage("/textures/Players.png"));
+
 
     public Helpers.Bounds bounds;
     private PlayerControlTemplate playerControls;
-    public Player(int id,BufferedImage sprite, int x, int y,int hitBoxX,int hitBoxY) {
-        super(sprite, x, y, Shape.Type.Poly);
+    public Player(int id,int x, int y, int hitBoxX, int hitBoxY) {
+        super(x, y, Shape.Type.Poly);
+
+        int i = id / 4 ;
+        int j = id % 4 ;
+        this.sprite = players.crop( i , j);
+
         int tempX = x + sprite.getWidth() / 2 -  hitBoxX / 2;
         int tempY  = y + sprite.getHeight() /2 - hitBoxY/ 2;
-
 
         hitBox = new Rectangle(tempX,tempY,hitBoxX,hitBoxY);
         bounds = new Helpers.Bounds(tempX,tempY,tempX+hitBoxX,tempY+hitBoxY);
@@ -41,6 +47,7 @@ public class Player extends GameObject {
         ((Polygon) shape).set(v1,v2,v3,v4);
         ((Polygon) shape).print();
     }
+
     public void setName(String name){
         this.name = name;
     }

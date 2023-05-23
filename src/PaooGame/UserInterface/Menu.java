@@ -22,7 +22,7 @@ public class Menu {
     public boolean levels;
     private boolean update;
     public  boolean save;
-
+    public boolean load;
     public Menu(int x, int y, int spacing, Background background) {
         options = new ArrayList<>();
         this.x = x;
@@ -64,6 +64,7 @@ public class Menu {
                 case "EXIT" -> stop = true;
                 case "Levels" -> levels = true;
                 case "Save Game" -> save = true;
+                case "Load Game"->load = true;
             }
         }
         else{
@@ -139,4 +140,8 @@ public class Menu {
         return levels;
     }
     public boolean Save(){return save;}
+
+    public boolean isLoad() {
+        return load;
+    }
 }

@@ -1,6 +1,7 @@
 package PaooGame;
 
 import PaooGame.DataBase.DBMatches;
+import PaooGame.Exception.CustomNullPointerException;
 import PaooGame.GameObjects.Ball;
 import PaooGame.GameObjects.Basket;
 import PaooGame.GameObjects.Player;
@@ -231,6 +232,18 @@ public class Game implements Runnable
                menu.save = false;
             }
 
+            if (menu.isLoad()){
+                dbMatches.loadLastMatch(match,"match");
+
+               // match.setMatch(basketRight,basketLeft,match.playerLeft,match.playerLeft,match.getBall(),match.getClock(),background,runningAds,fans,dbMatches);
+
+                if (match == null) {
+                    throw new CustomNullPointerException();
+                }
+
+                menu.load = false;
+                currentState = GameState.PLAYING;
+            }
 
             if(menu.Levels()){
                 currentState = GameState.MENU_Levels;
@@ -247,6 +260,7 @@ public class Game implements Runnable
                 menu.start = true;
                 menu.levels = false;
                 levels.start = false;
+                menu.load = false;
             }
         }
         else {
@@ -302,6 +316,20 @@ public class Game implements Runnable
           g.setColor(Color.BLACK);
           g.setFont(new Font(Font.SANS_SERIF,Font.ITALIC,30));
           g.drawString("Navigate with ARROWS",GameWindow.GetWndWidth()/2-100,100);
+
+          if (menu.Save()){
+              g.setColor(Color.orange);
+              g.setFont(new Font(Font.SANS_SERIF,Font.ITALIC,30));
+              g.drawString("Saved into DB successfully",GameWindow.GetWndWidth()/2-100,500);
+              g.drawString("",GameWindow.GetWndWidth()/2-100,500);
+          }
+
+          if (menu.isLoad()){
+              g.setColor(Color.orange);
+              g.setFont(new Font(Font.SANS_SERIF,Font.ITALIC,30));
+              g.drawString("Loaded from DB successfully",GameWindow.GetWndWidth()/2-100,500);
+              g.drawString("",GameWindow.GetWndWidth()/2-100,500);
+          }
       }else if(currentState==GameState.MENU_Levels){
           levels.draw(g);
 

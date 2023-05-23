@@ -9,19 +9,18 @@ import PaooGame.Graphics.Clock;
 import PaooGame.Graphics.Fan;
 import PaooGame.Graphics.RunningAd;
 
-import java.sql.*;
 import java.util.ArrayList;
 
 public class Match {
-    private Basket basketRight;
-    private Basket basketLeft;
-    private Player playerLeft;
-    private Player playerRight;
-    private Ball ball;
-    private Clock clock;
-    private Background background;
-    private static ArrayList<RunningAd> runningAds = new ArrayList<>();
-    private static Fan[] fans = new Fan[100];
+    public Basket basketRight;
+    public Basket basketLeft;
+    public Player playerLeft;
+    public Player playerRight;
+    public Ball ball;
+    public Clock clock;
+    public Background background;
+    public static ArrayList<RunningAd> runningAds = new ArrayList<>();
+    public static Fan[] fans = new Fan[100];
 
     public Basket getBasketRight() {
         return basketRight;
@@ -96,7 +95,7 @@ public class Match {
     }
 
 
-    public Match  setMatch(Basket basketRight, Basket basketLeft, Player player1, Player player2, Ball ball, Clock clock, Background background, ArrayList<RunningAd> runningAds, Fan[] fans, DBMatches dbMatches) {
+    public void setMatch(Basket basketRight, Basket basketLeft, Player player1, Player player2, Ball ball, Clock clock, Background background, ArrayList<RunningAd> runningAds, Fan[] fans, DBMatches dbMatches) {
         this.setBasketRight(basketRight);
         this.setBasketLeft(basketLeft);
         this.setPlayerLeft(player1);
@@ -104,11 +103,10 @@ public class Match {
         this.setBall(ball);
         this.setClock(clock);
         this.setBackground(background);
+
         Match.setRunningAds(runningAds);
         Match.setFans(fans);
 
         dbMatches.saveMatch("match", this);
-
-        return this;
     }
 }

@@ -66,7 +66,7 @@ public class Assets
 
         for (int column = 0 ; column < 4 ; column++){
             for(int line = 0 ; line < 4; line++){
-                arrayPlayers.add(new Player(column+line,players.crop(column,line), (int) playerStart.x, (int) playerStart.y,hitBoxXPlayer,hitBoxYPlayer));
+                arrayPlayers.add(new Player(column+line, (int) playerStart.x, (int) playerStart.y,hitBoxXPlayer,hitBoxYPlayer));
             }
         }
 
@@ -91,16 +91,18 @@ public class Assets
         playerRight = arrayPlayers.get(1);
 
         dbPlayers = new DBPlayer(dataBasePath);
-        //dbPlayers.createTable();
-       // dbPlayers.savePlayers("player","name,x_position,y_position",arrayPlayers);
+
+        // Todo Uncomment this if you do not have players in DB
+        //        dbPlayers.createTable();
+        //        dbPlayers.savePlayers("player","name,x_position,y_position",arrayPlayers);
 
         dbMatches = new DBMatches(dataBasePath);
         dbMatches.createTable();
 
         match = new Match();
+        clock = new Clock(GameWindow.GetWndWidth()/2,50,60);
 
         match.setMatch(basketRight, basketLeft, playerLeft, playerRight, ball, clock, field1, runningAds, fans, dbMatches);
-
 
         playerLeft.setKeys(PLAYER1_KEYS);
         playerRight.setKeys(PLAYER2_KEYS);
@@ -131,7 +133,6 @@ public class Assets
 
         //dataBaseManager = new DataBaseManager("player.db");
 
-
         menu = new Menu(GameWindow.GetWndWidth()/3, (int) (GameWindow.GetWndHeight()/5.5),150,menuBackground);
         menu.addOption(new Option("Start Game", Color.MAGENTA,Font.getFont(Font.SANS_SERIF),500,100));
         menu.addOption(new Option("Load Game", Color.MAGENTA,Font.getFont(Font.SANS_SERIF),500,100));
@@ -146,11 +147,8 @@ public class Assets
         levels.addOption(new Option("Level 3", Color.MAGENTA,Font.getFont(Font.SANS_SERIF),500,200));
         levels.addOption(new Option("CUSTOM", Color.MAGENTA,Font.getFont(Font.SANS_SERIF),500,200));
 
-
         runningAds.add(wizardGame2Add);
         runningAds.add(yourAddHere);
-
-        clock = new Clock(GameWindow.GetWndWidth()/2,50,60);
 
         // Set up the game bounds
         int gameWidth = GameWindow.GetWndWidth();
