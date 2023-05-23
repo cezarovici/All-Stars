@@ -22,7 +22,7 @@ public class DBMatches extends DataBaseManager{
     public static  final int hitBoxBall = 75;
 
     public static final int hitBoxXPlayer = 170;
-    public static final int hitBoxYPlayer = 200;
+    public static final int hitBoxYPlayer = 170;
 
     @Override
     public void  createTable(){

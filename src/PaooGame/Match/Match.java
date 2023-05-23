@@ -4,12 +4,12 @@ import PaooGame.DataBase.DBMatches;
 import PaooGame.GameObjects.Ball;
 import PaooGame.GameObjects.Basket;
 import PaooGame.GameObjects.Player;
-import PaooGame.Graphics.Background;
-import PaooGame.Graphics.Clock;
-import PaooGame.Graphics.Fan;
-import PaooGame.Graphics.RunningAd;
+import PaooGame.Graphics.*;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
+import static PaooGame.Graphics.Assets.dbMatches;
 
 public class Match {
     public Basket basketRight;
@@ -19,8 +19,9 @@ public class Match {
     public Ball ball;
     public Clock clock;
     public Background background;
-    public static ArrayList<RunningAd> runningAds = new ArrayList<>();
+    public  ArrayList<RunningAd> runningAds = new ArrayList<>();
     public static Fan[] fans = new Fan[100];
+    public BufferedImage fanImage;
 
     public Basket getBasketRight() {
         return basketRight;
@@ -66,6 +67,14 @@ public class Match {
         return clock;
     }
 
+    public BufferedImage getFanImage() {
+        return fanImage;
+    }
+
+    public void setFanImage(BufferedImage fanImage) {
+        this.fanImage = fanImage;
+    }
+
     public void setClock(Clock clock) {
         this.clock = clock;
     }
@@ -78,12 +87,12 @@ public class Match {
         this.background = background;
     }
 
-    public static ArrayList<RunningAd> getRunningAds() {
+    public  ArrayList<RunningAd> getRunningAds() {
         return runningAds;
     }
 
-    public static void setRunningAds(ArrayList<RunningAd> runningAds) {
-        Match.runningAds = runningAds;
+    public  void setRunningAds(ArrayList<RunningAd> runningAds) {
+        this.runningAds = runningAds;
     }
 
     public static Fan[] getFans() {
@@ -95,7 +104,7 @@ public class Match {
     }
 
 
-    public void setMatch(Basket basketRight, Basket basketLeft, Player player1, Player player2, Ball ball, Clock clock, Background background, ArrayList<RunningAd> runningAds, Fan[] fans, DBMatches dbMatches) {
+    public void setMatch(Basket basketRight, Basket basketLeft, Player player1, Player player2, Ball ball, Clock clock, Background background, ArrayList<RunningAd> runningAds, BufferedImage fanImage, DBMatches dbMatches) {
         this.setBasketRight(basketRight);
         this.setBasketLeft(basketLeft);
         this.setPlayerLeft(player1);
@@ -103,10 +112,30 @@ public class Match {
         this.setBall(ball);
         this.setClock(clock);
         this.setBackground(background);
+        this.fanImage = fanImage;
 
-        Match.setRunningAds(runningAds);
-        Match.setFans(fans);
+        this.setRunningAds(runningAds);
 
+
+        Fan.setFansImage(fanImage,Match.fans);
+
+       // dbMatches.saveMatch("match", this);
+    }
+
+    public void setTo(Match match){
+        this.setBasketRight(match.basketRight);
+        this.setBasketLeft(match.basketLeft);
+        this.setPlayerLeft(match.playerLeft);
+        this.setPlayerRight(match.playerRight);
+        this.setBall(match.ball);
+        this.setClock(match.clock);
+        this.setBackground(match.background);
+
+        this.setRunningAds(runningAds);
+
+        Fan.setFansImage(match.fanImage,Match.fans);
+    }
+    public void saveMatch(){
         dbMatches.saveMatch("match", this);
     }
 }

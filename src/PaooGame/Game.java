@@ -65,7 +65,7 @@ public class Game implements Runnable
     Menu menu;
     DBMatches dbMatches = new DBMatches("data_base.db");
     Menu levels;
-    Match match;
+    Match match,level1,level2,level3;
     ImpulseScene impulseScene;
     public Game(String title, int width, int height)
     {
@@ -93,25 +93,30 @@ public class Game implements Runnable
         Assets.Init();
 
         impulseScene = Assets.impulseScene;
-        background = Assets.field1;
-        player1 = Assets.playerLeft;
-        player2 = Assets.playerRight;
-
+   //     background = Assets.field1;
+//        player1 = Assets.playerLeft;
+//        player2 = Assets.playerRight;
+//
         match = Assets.match;
+//
+//        fans = Assets.fans;
+//
+//        runningAds = Assets.runningAds;
+//
+//        basketLeft = Assets.basketLeft;
+//        basketRight = Assets.basketRight;
+//
+//        clock = Assets.clock;
 
-        fans = Assets.fans;
-
-        runningAds = Assets.runningAds;
-
-        basketLeft = Assets.basketLeft;
-        basketRight = Assets.basketRight;
-
-        clock = Assets.clock;
-
-        ball = Assets.ball;
+  //      ball = Assets.ball;
 
         menu = Assets.menu;
         levels = Assets.levels;
+
+
+        level1 = Assets.level1;
+        level2 = Assets.level2;
+        level3 = Assets.level3;
     }
 
     /*! \fn public void run()
@@ -228,15 +233,16 @@ public class Game implements Runnable
             }
 
             if (menu.Save()){
-               match.setMatch(basketRight, basketLeft, player1, player2, ball, clock, background, runningAds, fans, dbMatches);
-               menu.save = false;
+               //match.setMatch(basketRight, basketLeft, player1, player2, ball, clock, background, runningAds, Assets.fanImage, dbMatches);
+               match.saveMatch();
+                menu.save = false;
             }
 
             if (menu.isLoad()){
                 dbMatches.loadLastMatch(match,"match");
 
-               // match.setMatch(basketRight,basketLeft,match.playerLeft,match.playerLeft,match.getBall(),match.getClock(),background,runningAds,fans,dbMatches);
-
+                //match.setMatch(basketRight,basketLeft,match.playerLeft,match.playerLeft,match.getBall(),match.getClock(),match.background,match.runningAds,match.fanImage,dbMatches);
+                match.setTo(match);
                 if (match == null) {
                     throw new CustomNullPointerException();
                 }
@@ -262,14 +268,38 @@ public class Game implements Runnable
                 levels.start = false;
                 menu.load = false;
             }
+
+            if(levels.isLevel1()){
+                match.setTo(level1);
+                levels.level1 = false;
+                menu.level1 = false;
+                currentState = GameState.PLAYING;
+                //match.saveMatch();
+            }
+
+            if(levels.isLevel2()){
+                match.setTo(level2);
+                levels.level2 = false;
+                menu.level2 = false;
+                currentState = GameState.PLAYING;
+                //match.saveMatch();
+            }
+
+            if(levels.isLevel3()){
+                match.setTo(level3);
+                levels.level3 = false;
+                menu.level3= false;
+                currentState = GameState.PLAYING;
+               // match.saveMatch();
+            }
         }
         else {
-            player1.update();
-            player2.update();
-            ball.update();
+            match.playerLeft.update();
+            match.playerRight.update();
+            match.ball.update();
             impulseScene.update();
 
-            for (RunningAd ad : runningAds) {
+            for (RunningAd ad : match.runningAds) {
                 ad.update();
             }
 
@@ -337,26 +367,26 @@ public class Game implements Runnable
           g.setFont(new Font(Font.SANS_SERIF,Font.ITALIC,30));
           g.drawString("ESC - move back to Main menu",GameWindow.GetWndWidth()/2-100,100);
       }else {
-          for (RunningAd ad : runningAds) {
+          for (RunningAd ad : match.runningAds) {
               ad.draw(g);
           }
 
-          for (Fan fan : fans) {
+          for (Fan fan : Match.fans) {
               fan.Draw(g);
           }
 
-          background.Draw(g);
+          match.background.Draw(g);
 
-          player1.Draw(g);
-          player2.Draw(g);
+          match.playerLeft.Draw(g);
+          match.playerRight.Draw(g);
 
-          basketRight.Draw(g);
-          basketLeft.Draw(g);
-          clock.draw(g);
+          match.basketRight.Draw(g);
+          match.basketLeft.Draw(g);
+          match.clock.draw(g);
 
-          ball.Draw(g);
+          match.ball.Draw(g);
 
-          //impulseScene.Draw((Graphics2D) g);
+          impulseScene.Draw((Graphics2D) g);
       }
 
         bs.show();

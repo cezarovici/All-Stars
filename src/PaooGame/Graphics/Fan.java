@@ -1,10 +1,12 @@
 package PaooGame.Graphics;
 
+import PaooGame.GameWindow.GameWindow;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Fan {
-    private final BufferedImage fan;
+    private BufferedImage fan;
     private int x;
     private int y;
     private static final int    fanWidth   = 32;
@@ -18,6 +20,27 @@ public class Fan {
         this.fan = fan;
         this.x = x;
         this.y = y;
+    }
+
+    public static void setFansImage(BufferedImage image,Fan[] fans){
+        // Set up the game bounds
+        int gameWidth = GameWindow.GetWndWidth();
+        int gameHeight = GameWindow.GetWndHeight();
+        int numFans = 100; // The total number of fans
+        int numRows = 4; // The number of rows
+        int fansPerRow = numFans / numRows; // The number of fans per row
+
+        int rowHeight = gameHeight / (numRows * 5); // The height of each row
+        int fanSpacing = gameWidth / fansPerRow; // The spacing between fans in each row
+
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < fansPerRow; j++) {
+                int x = j * fanSpacing + fanSpacing / 2; // The x-coordinate of the fan
+                int y = i * rowHeight + rowHeight / 2; // The y-coordinate of the fan
+
+                fans[i * fansPerRow + j] = new Fan(image, x, y + 200); // Add the fan to the array
+            }
+        }
     }
 
     public void Draw(Graphics graphics){

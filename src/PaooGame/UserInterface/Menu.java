@@ -23,6 +23,7 @@ public class Menu {
     private boolean update;
     public  boolean save;
     public boolean load;
+    public boolean level1,level2,level3;
     public Menu(int x, int y, int spacing, Background background) {
         options = new ArrayList<>();
         this.x = x;
@@ -61,10 +62,17 @@ public class Menu {
             keyPressed = true;
             switch (getSelectedOption().getText()) {
                 case "Start Game" -> start = true;
+
                 case "EXIT" -> stop = true;
+
                 case "Levels" -> levels = true;
+
                 case "Save Game" -> save = true;
                 case "Load Game"->load = true;
+
+                case "Level 1" -> level1 = true;
+                case "Level 2" -> level2 = true;
+                case "Level 3" -> level3 = true;
             }
         }
         else{
@@ -143,5 +151,17 @@ public class Menu {
 
     public boolean isLoad() {
         return load;
+    }
+
+    public boolean isLevel1() {
+        return level1;
+    }
+
+    public boolean isLevel2() {
+        return level2;
+    }
+
+    public boolean isLevel3() {
+        return level3;
     }
 }

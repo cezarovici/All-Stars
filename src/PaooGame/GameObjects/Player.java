@@ -66,6 +66,8 @@ public class Player extends GameObject {
     @Override
     public void Draw(Graphics graphics) {
         super.Draw(graphics);
+        graphics.setColor(Color.BLACK);
+        //graphics.drawString(name, (int) getCenter().x, (int) getCenter().y);
     }
 
     public boolean isJumping(){

@@ -1,13 +1,10 @@
 package PaooGame.GameObjects;
 
-import PaooGame.Game;
 import PaooGame.ImpulseEngine.Body;
 import PaooGame.ImpulseEngine.Shape;
 import PaooGame.ImpulseEngine.Vec2;
-import PaooGame.UserInterface.Mouse;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -65,12 +62,6 @@ public abstract class GameObject {
         setX((int)shape.body.getPosition().x);
     }
 
-    public void moveByMouse(Mouse mouse){
-        if (mouse.mouseUp[MouseEvent.BUTTON1]){
-            setY(mouse.mouseY);
-            setX(mouse.mouseX);
-        }
-    }
 
     public int getId() {
         return id;
